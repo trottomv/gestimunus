@@ -44,3 +44,4 @@ admin.site.register(CashDesk, CashDeskAdmin)
 admin.site.register(MovementsCausal)
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
+admin.site.site_header = 'Gesti-Munus'
