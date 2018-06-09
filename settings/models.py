@@ -5,12 +5,15 @@ from django.contrib.auth.models import User, Group
 from multiselectfield import MultiSelectField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import gettext as _
+
 
 # Create your models here.
 
 class CashDesk(models.Model):
-	# class Meta:
-	# 	verbose_name_plural = "Cassa Centro di Costo"
+    # class Meta:
+    #     verbose_name = _("Cash Desk")
+    #     verbose_name_plural = "Cash Desks"
 
 	u = User.objects.all()
 	LIST = ()
@@ -18,9 +21,9 @@ class CashDesk(models.Model):
 		singu = (str(index), str(value))
 		LIST = LIST + (singu,)
 
-	cashdesk = models.CharField(max_length=200)
-	centercost = models.IntegerField()
-	owners = MultiSelectField(choices=LIST)
+	cashdesk = models.CharField(max_length=200, verbose_name=_('Cash Desk'))
+	centercost = models.IntegerField(verbose_name=_('Center Cost'))
+	owners = MultiSelectField(choices=LIST, verbose_name=_('Owners'))
 	# owners = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 	# owners = models.ForeignKey(to=User, null=True, blank=True)
 
@@ -30,6 +33,7 @@ class CashDesk(models.Model):
 
 	def __str__(self):
 		return u'%s' % (self.cashdesk)
+
 
 class Profile(models.Model):
     STUDENT = 1
@@ -64,7 +68,7 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
 
 class MovementsCausal(models.Model):
 	# class Meta:
-	# 	verbose_name_plural = "Causale"
+	# 	verbose_name_plural = _("Movements Causals")
 
 	causal = models.CharField(max_length=200)
 
@@ -76,10 +80,10 @@ class MovementsCausal(models.Model):
 		return u'%s' % (self.causal)
 
 class Operator(models.Model):
-	# author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 	# class Meta:
-		# verbose_name_plural = "Operatori"
+	# 	verbose_name_plural = _("Operators")
 
+    # author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 	# sign_id = models.AutoField(primary_key=True)
 	name = models.CharField(primary_key=True, max_length=200)
 	surname = models.CharField(max_length=200)
@@ -95,10 +99,10 @@ class Operator(models.Model):
 
 
 class DiariesType(models.Model):
-	# author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-	# class Meta:
-	# 	verbose_name_plural = "Tipi Diario"
+    # class Meta:
+    # 	verbose_name_plural = _("Diary Types")
 
+    # author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 	# sign_id = models.AutoField(primary_key=True)
 	diarytype = models.CharField(primary_key=True, max_length=200)
 	created_date = models.DateTimeField(default=timezone.now)
@@ -112,9 +116,8 @@ class DiariesType(models.Model):
 
 
 class Customer(models.Model):
-
 	# class Meta:
-		# verbose_name_plural = "Utenti servizio"
+	# 	verbose_name_plural = _("Service Customers")
 
 	# custid = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=200)
