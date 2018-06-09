@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'settings',
     'tools',
+    'rangefilter',
 ]
 
 MIDDLEWARE_CLASSES = [
