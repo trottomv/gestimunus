@@ -4,9 +4,9 @@ from django.contrib.auth.models import User, Group
 from django.contrib import admin
 
 # Create your models here.
-class Diaries(models.Model):
+class Diary(models.Model):
 	class Meta:
-		verbose_name_plural = "Diari"
+		verbose_name_plural = "Diaries"
 
 	author = models.ForeignKey('settings.Operator', on_delete=models.CASCADE)
 	diarytype = models.ForeignKey('settings.DiariesType', on_delete=models.CASCADE)
