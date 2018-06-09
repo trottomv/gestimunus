@@ -3,8 +3,11 @@ from django.contrib import admin
 from django.utils import timezone
 from django.contrib.auth.models import User, Group
 from multiselectfield import MultiSelectField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
+
 class CashDesk(models.Model):
 	# class Meta:
 	# 	verbose_name_plural = "Cassa Centro di Costo"
@@ -27,6 +30,37 @@ class CashDesk(models.Model):
 
 	def __str__(self):
 		return u'%s' % (self.cashdesk)
+
+class Profile(models.Model):
+    STUDENT = 1
+    TEACHER = 2
+    SUPERVISOR = 3
+    ROLE_CHOICES = (
+        (STUDENT, 'Student'),
+        (TEACHER, 'Teacher'),
+        (SUPERVISOR, 'Supervisor'),
+    )
+
+    cd = CashDesk.objects.all()
+    LIST = ()
+    for index, value in enumerate(cd):
+        singcd = (str(index), str(value))
+        LIST = LIST + (singcd,)
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    location = models.CharField(max_length=30, blank=True)
+    birthdate = models.DateField(null=True, blank=True)
+    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, null=True, blank=True)
+    cashdeskowner = MultiSelectField(choices=LIST, null=True, blank=True)
+
+    def __str__(self):  # __unicode__ for Python 2
+        return self.user.username
+
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()
 
 class MovementsCausal(models.Model):
 	# class Meta:
