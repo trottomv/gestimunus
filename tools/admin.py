@@ -5,8 +5,8 @@ from .models import Diary
 
 # Register your models here.
 class DiaryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'diarytype', 'customer', 'text', 'created_date', 'author',)
-    search_fields = ('diarytype', 'customer')
-    list_filter = ('diarytype', 'customer', 'author', ('created_date', DateRangeFilter))
+    list_display = ('title', 'diaryType', 'customer', 'text', 'created_date', 'sign',)
+    search_fields = ('diaryType', 'customer')
+    list_filter = ('diaryType', 'customer', 'sign', ('created_date', DateRangeFilter))
 
 admin.site.register(Diary, DiaryAdmin)

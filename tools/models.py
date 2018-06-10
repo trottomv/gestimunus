@@ -2,14 +2,17 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User, Group
 from django.contrib import admin
+from django.utils.translation import gettext as _
+
 
 # Create your models here.
 class Diary(models.Model):
 	class Meta:
-		verbose_name_plural = "Diaries"
+		verbose_name_plural = _("Diaries")
+        verbose_name = _("Diary")
 
-	author = models.ForeignKey('settings.Operator', on_delete=models.CASCADE)
-	diarytype = models.ForeignKey('settings.DiariesType', on_delete=models.CASCADE)
+	sign = models.ForeignKey('settings.Operator', on_delete=models.CASCADE)
+	diaryType = models.ForeignKey('settings.DiariesType', on_delete=models.CASCADE)
 	customer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
 	title = models.CharField(max_length=200)
 	text = models.TextField()
@@ -22,3 +25,6 @@ class Diary(models.Model):
 	def __str__(self):
 		# return u'%s' % (self.diary_id)
 		return u'%s %s' % (self.title, self.created_date)
+
+# class Agenda(models.Model):
+    # class Meta:
