@@ -10,9 +10,16 @@ class DiaryAdmin(admin.ModelAdmin):
     list_filter = ('diaryType', 'customer', 'sign', ('created_date', DateRangeFilter))
 
 class AgendaAdmin(admin.ModelAdmin):
-    list_display = ('eventTitle', 'eventDescription', 'eventStart', 'eventEnd',)
-    search_fields = ('eventTitle', 'eventDescription')
-    list_filter = ('eventTitle', ('eventStart', DateTimeRangeFilter))
+    class Media:
+        js = (
+            'https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.print.css',
+            'gestimuns/static/js/fullCalendar.js',
+        )
+    # list_display = ('eventTitle', 'eventDescription', 'eventStart', 'eventEnd',)
+    # search_fields = ('eventTitle', 'eventDescription')
+    # list_filter = ('eventTitle', ('eventStart', DateTimeRangeFilter))
 
 
 
