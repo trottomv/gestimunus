@@ -1,0 +1,34 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% load staticfiles %}
+
+{% block branding %}
+<!-- <h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1> -->
+<h1 id="site-name">
+  <a class="navbar-brand" href="{% url 'admin:index' %}">
+    <img src="{% gestimunus/static 'gestimunus.png' %}" height="40px" />
+  </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+
+<!-- {% extends "admin/base.html" %}
+{% load i18n %}{% load admin_static bootstrapped_goodies_tags %}
+
+{% block title %}{% render_with_template_if_exist "admin/admin_title.html" title %} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<a class="navbar-brand" href="{% url 'admin:index' %}">{% if site_header %}{{ site_header }}{% else %}{% render_with_template_if_exist "admin/admin_title.html" _('Django administration') %}{% endif %}</a>
+<h1 id="site-name">
+  <a class="navbar-brand" href="{% url 'admin:index' %}">
+    <img src="{% staticfiles 'gestimunus.png' %}" height="40px" />
+  </a>
+</h1>
+
+{% endblock %}
+
+{% block nav-global %}{% endblock %} -->

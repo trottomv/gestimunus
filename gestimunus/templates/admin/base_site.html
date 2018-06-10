@@ -1,0 +1,13 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% load staticfiles %}
+
+{% block branding %}
+  <a class="navbar-brand" href="{% url 'admin:index' %}">
+    <img src="{% static 'gestimunus-inline.png' %}" height="25px"></img>
+  </a>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

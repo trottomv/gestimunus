@@ -59,7 +59,7 @@ ROOT_URLCONF = 'gestimunus.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'gestimunus/templates/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,6 +71,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'gestimunus.wsgi.application'
 
@@ -127,7 +128,7 @@ LANGUAGES = (
     ('it', gettext('Italian')),
     ('en', gettext('English')),
 )
-MODELTRANSLATION_LANGUAGES = ('en', 'it')
+MODELTRANSLATION_LANGUAGES = ('it', 'en')
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'it'
 
 #TIME_ZONE = 'UTC'
@@ -143,5 +144,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/gestimunus/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "gestimunus/static/"),
+]
