@@ -12,8 +12,8 @@ from django.utils.translation import gettext as _
 
 class CashDesk(models.Model):
     # class Meta:
-    #     verbose_name_plural = _("Cash Desks")
-    #     verbose_name = _("Cash Desk")
+        # verbose_name_plural = _("Cash Desks")
+        # verbose_name = _("Cash Desk")
 
 	u = User.objects.all()
 	LIST = ()
@@ -32,7 +32,7 @@ class CashDesk(models.Model):
 		self.save()
 
 	def __str__(self):
-		return u'%s' % (self.cashdesk)
+		return u'%s %s' % (self.id, self.cashdesk)
 
 
 class Profile(models.Model):
