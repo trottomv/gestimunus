@@ -10,7 +10,10 @@ class DiaryAdmin(admin.ModelAdmin):
     list_filter = ('diaryType', 'customer', 'sign', ('created_date', DateRangeFilter))
 
 class AgendaAdmin(admin.ModelAdmin):
-    list_display = ('eventTitle', 'eventStart', 'eventEnd',)
+    list_display = ('eventTitle', 'eventDescription', 'eventStart', 'eventEnd',)
+    search_fields = ('eventTitle', 'eventDescription')
+    list_filter = ('eventTitle', ('eventStart', DateTimeRangeFilter))
+
 
 
 admin.site.register(Diary, DiaryAdmin)

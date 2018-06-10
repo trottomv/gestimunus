@@ -33,6 +33,7 @@ class Agenda(models.Model):
         verbose_name = _("Agenda")
 
     eventTitle = models.CharField(max_length=200)
+    eventDescription = models.TextField(null=True)
     eventStart = models.DateTimeField()
     eventEnd = models.DateTimeField()
 
