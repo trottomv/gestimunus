@@ -1,2 +1,4 @@
 .env
 gestimunusenv/*
+*.pyc
+*.pyo
