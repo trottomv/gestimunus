@@ -12,8 +12,8 @@ from django.utils.translation import gettext as _
 
 class CashDesk(models.Model):
     # class Meta:
+    #     verbose_name_plural = _("Cash Desks")
     #     verbose_name = _("Cash Desk")
-    #     verbose_name_plural = "Cash Desks"
 
 	u = User.objects.all()
 	LIST = ()
@@ -67,8 +67,8 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     instance.profile.save()
 
 class MovementsCausal(models.Model):
-	# class Meta:
-	# 	verbose_name_plural = _("Movements Causals")
+	class Meta:
+		verbose_name_plural = _("Movements Causals")
 
 	causal = models.CharField(max_length=200)
 
@@ -80,8 +80,8 @@ class MovementsCausal(models.Model):
 		return u'%s' % (self.causal)
 
 class Operator(models.Model):
-	# class Meta:
-	# 	verbose_name_plural = _("Operators")
+	class Meta:
+		verbose_name_plural = _("Operators")
 
     # author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 	# sign_id = models.AutoField(primary_key=True)
@@ -116,8 +116,8 @@ class DiariesType(models.Model):
 
 
 class Customer(models.Model):
-	# class Meta:
-	# 	verbose_name_plural = _("Service Customers")
+	class Meta:
+		verbose_name_plural = _("Service Customers")
 
 	# custid = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=200)
