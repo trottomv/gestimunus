@@ -26,5 +26,20 @@ class Diary(models.Model):
 		# return u'%s' % (self.diary_id)
 		return u'%s %s' % (self.title, self.created_date)
 
-# class Agenda(models.Model):
+class Agenda(models.Model):
+
     # class Meta:
+    # 	verbose_name_plural = _("Agenda")
+    #     verbose_name = _("Agenda")
+
+    eventTitle = models.CharField(max_length=200)
+    eventStart = models.DateTimeField()
+    eventEnd = models.DateTimeField()
+
+    def publish(self):
+        self.published_date = timezone.now()
+        self.save()
+
+    def __str__(self):
+        return u'%s' % (self.id)
+        # return u'%s %s' % (self.title, self.created_date)
