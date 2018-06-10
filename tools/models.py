@@ -28,9 +28,9 @@ class Diary(models.Model):
 
 class Agenda(models.Model):
 
-    # class Meta:
-    # 	verbose_name_plural = _("Agenda")
-    #     verbose_name = _("Agenda")
+    class Meta:
+    	verbose_name_plural = _("Agenda")
+        verbose_name = _("Agenda")
 
     eventTitle = models.CharField(max_length=200)
     eventStart = models.DateTimeField()
