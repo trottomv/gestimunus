@@ -17,9 +17,9 @@ class AgendaAdmin(admin.ModelAdmin):
             'https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.print.css',
             'js/fullcalendar.js',
         )
-    list_display = ('eventTitle', 'eventDescription', 'eventStart', 'eventEnd',)
-    search_fields = ('eventTitle', 'eventDescription')
-    list_filter = ('eventTitle', ('eventStart', DateTimeRangeFilter))
+    list_display = ('eventTitle', 'eventCustomer', 'eventDescription', 'eventStart', 'eventEnd',)
+    search_fields = ('eventTitle', 'eventCustomer', 'eventDescription')
+    list_filter = ('eventTitle', 'eventCustomer', ('eventStart', DateTimeRangeFilter))
 
 
 

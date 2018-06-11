@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'settings',
     'tools',
     'rangefilter',
-    'import_export',
+    'export_action',
 ]
 
 MIDDLEWARE_CLASSES = [

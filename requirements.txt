@@ -1,7 +1,8 @@
-django==1.8
+django>=1.8
 django-getenv>=1.3.2
 django-dotenv>=1.4.2
 django_admin_bootstrapped>=2.5.7
 psycopg2>=2.5.4
 django-multiselectfield>=0.1.8
-django-import-export>=1.0.1
+django-export-action>=0.1.1
+six>=1.11.0
