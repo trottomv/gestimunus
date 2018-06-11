@@ -45,3 +45,9 @@ class Agenda(models.Model):
     def __str__(self):
         return u'%s' % (self.id)
         # return u'%s %s' % (self.title, self.created_date)
+
+class AgendaScheduler(Agenda):
+    class Meta:
+        proxy = True
+    	verbose_name_plural = _("Agenda Planner")
+        verbose_name = _("Agenda Planner")

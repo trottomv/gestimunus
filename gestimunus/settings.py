@@ -39,10 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'settings',
-    'tools',
     'rangefilter',
     'export_action',
+    'fullcalendar',
+    'settings',
+    'tools',
 ]
 
 MIDDLEWARE_CLASSES = [

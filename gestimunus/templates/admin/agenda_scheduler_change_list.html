@@ -1,11 +1,27 @@
 {% extends "admin/change_list.html" %}
 
 {% block content_title %}
-    <h1> Sales Summary </h1>
+    <span class="navbar-brand">Agenda Planner </span>
 {% endblock %}
 
 {% block result_list %}
-    Our content goes here…
+    {% load fullcalendar_tags %}
+
+    <!DOCTYPE html>
+    <head>
+
+        <title></title>
+
+        {% fullcalendar_css %}
+        {% fullcalendar_print_css %}
+        {% fullcalendar_jquery %}
+        {% fullcalendar_jquery_ui %}
+        {% fullcalendar_javascript %}
+
+
+    </head>
+    {% calendar %}
+
 {% endblock %}
 
 {% block pagination %}{% endblock %}
