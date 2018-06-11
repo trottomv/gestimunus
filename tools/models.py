@@ -43,7 +43,7 @@ class Agenda(models.Model):
         self.save()
 
     def __str__(self):
-        return u'%s' % (self.id)
+        return u'%s' % (self.eventTitle)
         # return u'%s %s' % (self.title, self.created_date)
 
 class AgendaScheduler(Agenda):
