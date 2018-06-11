@@ -4,8 +4,12 @@ import sys
 
 import dotenv
 
+import logging
+
+logger = logging.getLogger('textlogger')
+
 if __name__ == "__main__":
-  
+
     dotenv.read_dotenv()
 
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "gestimunus.settings")
