@@ -7,19 +7,38 @@
 {% block result_list %}
     {% load fullcalendar_tags %}
 
-    <!DOCTYPE html>
-    <head>
-
-        <title></title>
-
-        {% fullcalendar_css %}
-        {% fullcalendar_print_css %}
-        {% fullcalendar_jquery %}
-        {% fullcalendar_jquery_ui %}
-        {% fullcalendar_javascript %}
+    {% fullcalendar_css %}
+    {% fullcalendar_print_css %}
+    {% fullcalendar_jquery %}
+    {% fullcalendar_jquery_ui %}
+    {% fullcalendar_javascript %}
 
 
-    </head>
+
+    <script>
+    $(document).ready(function() {
+            $('#calendar').fullCalendar({
+              header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+              },
+              defaultView: 'month',
+              editable: true,
+              eventLimit: true,
+              events: [
+                    {% for i in eventlist %}
+                    {
+                        title: "{{ i.eventTitle}}",
+                        start: '{{ i.eventStart|date:"Y-m-d" }}',
+                        end: '{{ i.eventEnd|date:"Y-m-d" }}',
+                    },
+                    {% endfor %}
+
+                ]
+            });
+        });
+    </script>
     {% calendar %}
 
 {% endblock %}
