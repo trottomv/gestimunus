@@ -16,18 +16,14 @@ class AgendaAdmin(admin.ModelAdmin):
 
 @admin.register(AgendaScheduler)
 class AgendaSchedulerAdmin(admin.ModelAdmin):
-    class Media:
-        js = (
-            'https://code.jquery.com/jquery-1.12.4.min.js',
-            'https://code.jquery.com/ui/1.12.0/jquery-ui.min.js',
-            'https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css',
-            'https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js',
-            'https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css',
-            'https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.print.css',
-            'js/fullcalendar.js',
-        )
     change_list_template = 'admin/agenda_scheduler_change_list.html'
-    date_hierarchy = 'eventStart'
+    # date_hierarchy = 'eventStart'
+    # form_class = Agenda
+
+    def get_context_data(self, **kwargs):
+        context = super(CalendarPage, self).get_context_data(**kwargs)
+        context['eventlist'] = Agenda.objects.all()
+        return context
 
 admin.site.register(Diary, DiaryAdmin)
 admin.site.register(Agenda, AgendaAdmin)
