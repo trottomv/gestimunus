@@ -180,7 +180,7 @@ LOGGING = {
         'logfile': {
             'level':'INFO',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': STATIC_URL + "/logs/gestimunus.log",
+            'filename': "gestimunus/static/logs/gestimunus.log",
             'maxBytes': 50000,
             'backupCount': 2,
             'formatter': 'verbose',
@@ -197,6 +197,11 @@ LOGGING = {
             'propagate': True,
             'level':'WARN',
         },
+        # 'django.request': {
+        #     'handlers':['console'],
+        #     'propagate': True,
+        #     'level':'WARN',
+        # },
         'django.db.backends': {
             'handlers': ['console'],
             'level': 'DEBUG',
@@ -208,3 +213,6 @@ LOGGING = {
         },
     }
 }
+
+import logging.config
+logging.config.dictConfig(LOGGING)
