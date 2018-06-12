@@ -26,16 +26,19 @@
               defaultView: 'month',
               editable: true,
               eventLimit: true,
-              events: [
-                    {% for i in eventlist %}
-                    {
-                        title: "{{ i.eventTitle}}",
-                        start: '{{ i.eventStart|date:"Y-m-d" }}',
-                        end: '{{ i.eventEnd|date:"Y-m-d" }}',
-                    },
-                    {% endfor %}
-
-                ]
+              events: "/eventjson",
+              // events: [
+              //       // {% for i in events %}
+              //       {
+              //           title: "{{ title }}",
+              //           start: "{{ start }}",
+              //           end: "{{ end }}",
+              //           allDay: false,
+              //       },
+              //     // {% endfor %}
+              //
+              //   ],
+                timeFormat: 'H(:mm)' // uppercase H for 24-hour clock
             });
         });
     </script>

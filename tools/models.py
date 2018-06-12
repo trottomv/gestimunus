@@ -50,4 +50,4 @@ class AgendaScheduler(Agenda):
     class Meta:
         proxy = True
     	verbose_name_plural = _("Agenda Planner")
-        verbose_name = _("Agenda Planner")
+        verbose_name = _("Eventi")
