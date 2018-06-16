@@ -6,8 +6,6 @@ import ast
 import json
 from django.http import HttpResponse
 import pytz
-# from django.utils import timezone
-# import settings
 
 cet = pytz.timezone('CET')
 offset = cet.utcoffset(datetime.now())
@@ -23,14 +21,14 @@ class DateTimeEncoder(json.JSONEncoder):
 
 def eventsFeed(request):
     # from django.utils.timezone import utc
-    from django.core.serializers.json import DjangoJSONEncoder
+    # from django.core.serializers.json import DjangoJSONEncoder
 
     # if request.is_ajax():
     #     print 'Its ajax from fullCalendar()'
 
     # try:
-    #     start = datetime.fromtimestamp(int(request.GET.get('start', False))).replace(tzinfo=utc)
-    #     end = datetime.fromtimestamp(int(request.GET.get('end',False)))
+        # start = datetime.fromtimestamp(int(request.GET.get('start', False))).replace(tzinfo=utc)
+        # end = datetime.fromtimestamp(int(request.GET.get('end',False)))
     # except ValueError:
     #     start = datetime.now.replace(tzinfo=utc)
     #     end = start + timedelta(days=7)
@@ -40,8 +38,8 @@ def eventsFeed(request):
     for entry in entries:
         entry_id = entry['id']
         title = entry['eventTitle']
-        start = entry['eventStart']
-        end = entry['eventEnd']
+        start = (datetime.strptime(entry['eventStart'], '%Y-%m-%dT%H:%M:%S+00:00') + offset).isoformat()
+        end = (datetime.strptime(entry['eventEnd'], '%Y-%m-%dT%H:%M:%S+00:00') + offset).isoformat()
         description = entry['eventDescription']
         url= ("/tools/agenda/" + str(entry_id))
         allDay = False
