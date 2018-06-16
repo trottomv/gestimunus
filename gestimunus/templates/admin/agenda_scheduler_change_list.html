@@ -13,36 +13,34 @@
     {% fullcalendar_jquery_ui %}
     {% fullcalendar_javascript %}
 
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/locale-all.js"></script> -->
-
     <script>
     $(document).ready(function() {
-            $('#calendar').fullCalendar({
-              header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-              },
-              defaultView: 'agendaWeek',
-              editable: false,
-              eventLimit: false,
-              events: "/eventjson",
-              // events: [
-              //       // {% for i in events %}
-              //       {
-              //           title: "{{ title }}",
-              //           start: "{{ start }}",
-              //           end: "{{ end }}",
-              //           allDay: false,
-              //       },
-              //     // {% endfor %}
-              //
-              //   ],
-              timeFormat: 'H(:mm)', // uppercase H for 24-hour clock
-              eventColor: '#337ab7',
-              lang: 'it',
-            });
-        });
+      $('#calendar').fullCalendar({
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,agendaWeek,agendaDay'
+        },
+        defaultView: 'agendaWeek',
+        editable: false,
+        eventLimit: false,
+        events: "/eventjson",
+        timeFormat: 'H(:mm)', // uppercase H for 24-hour clock
+        eventColor: '#337ab7',
+        selectable: true,
+        // eventRender: function(event, element) {
+        //     $(element).tooltip({title: event.title});
+        // }
+        // eventClick: function(event) {
+        //   $(event.title).dialog();
+        //   if (event) {
+        //     // alert(event.title + ' ' + event.description);
+        //     // window.open(event.url);
+        //     return false;
+        //   }
+        // },
+      });
+    });
     </script>
     {% calendar %}
 
