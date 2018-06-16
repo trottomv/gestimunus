@@ -5,6 +5,12 @@ from .models import Agenda
 import ast
 import json
 from django.http import HttpResponse
+import pytz
+# from django.utils import timezone
+# import settings
+
+cet = pytz.timezone('CET')
+offset = cet.utcoffset(datetime.now())
 
 # Create your views here.
 class DateTimeEncoder(json.JSONEncoder):
@@ -16,32 +22,31 @@ class DateTimeEncoder(json.JSONEncoder):
 
 
 def eventsFeed(request):
-    from django.utils.timezone import utc
+    # from django.utils.timezone import utc
     from django.core.serializers.json import DjangoJSONEncoder
 
-    if request.is_ajax():
-        print 'Its ajax from fullCalendar()'
+    # if request.is_ajax():
+    #     print 'Its ajax from fullCalendar()'
 
-    try:
-        start = datetime.fromtimestamp(int(request.GET.get('start', False))).replace(tzinfo=utc)
-        end = datetime.fromtimestamp(int(request.GET.get('end',False)))
-    except ValueError:
-        start = datetime.now.replace(tzinfo=utc)
-        end = start + timedelta(days=7)
+    # try:
+    #     start = datetime.fromtimestamp(int(request.GET.get('start', False))).replace(tzinfo=utc)
+    #     end = datetime.fromtimestamp(int(request.GET.get('end',False)))
+    # except ValueError:
+    #     start = datetime.now.replace(tzinfo=utc)
+    #     end = start + timedelta(days=7)
 
-    # entries = Agenda.objects.filter(date__gte=start).filter(date__lte=end)
-    # entries = Agenda.objects.all()
-    entries = ast.literal_eval(json.dumps([dict(item) for item in Agenda.objects.all().values('eventTitle', 'eventDescription', 'eventStart', 'eventEnd')], cls=DateTimeEncoder))
+    entries = ast.literal_eval(json.dumps([dict(item) for item in Agenda.objects.all().values('eventTitle', 'eventDescription', 'eventStart', 'eventEnd', 'id')], cls=DateTimeEncoder))
     json_list = []
     for entry in entries:
-        # entry_id = entry.id
+        entry_id = entry['id']
         title = entry['eventTitle']
         start = entry['eventStart']
         end = entry['eventEnd']
         description = entry['eventDescription']
+        url= ("/tools/agenda/" + str(entry_id))
         allDay = False
 
-        json_entry = {'title': title, 'description': description, 'start':start, 'end':end, 'allDay':allDay, }
+        json_entry = { 'id': entry_id, 'title': title, 'description': description, 'start':start, 'end':end, 'allDay':allDay, 'url': url}
         json_list.append(json_entry)
 
     return HttpResponse(json.dumps(json_list), content_type='application/json')
