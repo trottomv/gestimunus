@@ -1,6 +1,6 @@
 from django.contrib import admin
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
-from .models import Diary, Agenda, AgendaScheduler
+from .models import Diary, Agenda, Planner
 # import serialize
 import ast
 from datetime import datetime
@@ -25,8 +25,8 @@ class DateTimeEncoder(json.JSONEncoder):
 
         return json.JSONEncoder.default(self, o)
 
-@admin.register(AgendaScheduler)
-class AgendaSchedulerAdmin(admin.ModelAdmin):
+@admin.register(Planner)
+class PlannerAdmin(admin.ModelAdmin):
     change_list_template = 'admin/agenda_scheduler_change_list.html'
 
     # events = ast.literal_eval(serialize('json', Agenda.objects.all()))

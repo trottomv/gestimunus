@@ -29,8 +29,8 @@ class Diary(models.Model):
 class Agenda(models.Model):
 
     class Meta:
-    	verbose_name_plural = _("Agenda")
-        verbose_name = _("Agenda")
+    	verbose_name_plural = _("Events")
+        verbose_name = _("Event")
 
     eventTitle = models.CharField(max_length=200)
     eventCustomer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
@@ -46,8 +46,8 @@ class Agenda(models.Model):
         return u'%s' % (self.eventTitle)
         # return u'%s %s' % (self.title, self.created_date)
 
-class AgendaScheduler(Agenda):
+class Planner(Agenda):
     class Meta:
         proxy = True
-    	verbose_name_plural = _("Agenda Planner")
-        verbose_name = _("Eventi")
+    	verbose_name_plural = _("Planner")
+        verbose_name = _("Agenda")
