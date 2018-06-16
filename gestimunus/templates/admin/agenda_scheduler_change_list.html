@@ -13,7 +13,7 @@
     {% fullcalendar_jquery_ui %}
     {% fullcalendar_javascript %}
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/locale/it.js"></script>
 
     <script>
     $(document).ready(function() {
@@ -24,8 +24,8 @@
                 right: 'month,agendaWeek,agendaDay'
               },
               defaultView: 'agendaWeek',
-              editable: true,
-              eventLimit: true,
+              editable: false,
+              eventLimit: false,
               events: "/eventjson",
               // events: [
               //       // {% for i in events %}
@@ -40,6 +40,7 @@
               //   ],
               timeFormat: 'H(:mm)', // uppercase H for 24-hour clock
               eventColor: '#337ab7',
+              locale: 'it',
             });
         });
     </script>
