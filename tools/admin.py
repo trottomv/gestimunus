@@ -9,9 +9,13 @@ import json
 # Register your models here.
 
 class DiaryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'diaryType', 'customer', 'text', 'created_date', 'sign', 'upload')
+    list_display = ('title', 'diaryType', 'customer', '_get_text', 'created_date', 'sign', 'upload')
     search_fields = ('diaryType', 'customer')
     list_filter = ('diaryType', 'customer', 'sign', ('created_date', DateRangeFilter))
+
+    def _get_text(self, obj):
+        return u'<html>%s</html>' % obj.text
+    _get_text.allow_tags = True
 
 class AgendaAdmin(admin.ModelAdmin):
     list_display = ('eventTitle', 'eventCustomer', 'eventDescription', 'eventStart', 'eventEnd',)
