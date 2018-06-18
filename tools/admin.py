@@ -1,6 +1,6 @@
 from django.contrib import admin
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
-from .models import Diary, Agenda, Planner
+from .models import Diary, Agenda, Planner, CashMovements
 # import serialize
 import ast
 from datetime import datetime
@@ -57,6 +57,10 @@ class PlannerAdmin(admin.ModelAdmin):
     #     # context['events'] = ast.literal_eval(json.dumps([dict(item) for item in Agenda.objects.all().values('eventTitle', 'eventStart', 'eventEnd')], cls=DateTimeEncoder))
     #     return context
 
+class CashMovementsAdmin(admin.ModelAdmin):
+    list_display = ('operation_date', 'cashdesk', 'causal', 'supplier',)
+
 
 admin.site.register(Diary, DiaryAdmin)
 admin.site.register(Agenda, AgendaAdmin)
+admin.site.register(CashMovements, CashMovementsAdmin)
