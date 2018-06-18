@@ -4,6 +4,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib import admin
 from django.utils.translation import gettext as _
 from tinymce import HTMLField
+from gestimunus import settings
 
 # Create your models here.
 class Diary(models.Model):
@@ -16,6 +17,7 @@ class Diary(models.Model):
     title = models.CharField(max_length=200)
     # text = models.TextField()
     text = HTMLField('Content')
+    upload = models.FileField(upload_to=settings.STATIC_UPLOAD, null=True)
     sign = models.ForeignKey('settings.Operator', on_delete=models.CASCADE)
     created_date = models.DateTimeField(default=timezone.now)
 

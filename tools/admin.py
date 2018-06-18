@@ -9,7 +9,7 @@ import json
 # Register your models here.
 
 class DiaryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'diaryType', 'customer', 'text', 'created_date', 'sign',)
+    list_display = ('title', 'diaryType', 'customer', 'text', 'created_date', 'sign', 'upload')
     search_fields = ('diaryType', 'customer')
     list_filter = ('diaryType', 'customer', 'sign', ('created_date', DateRangeFilter))
 
