@@ -27,6 +27,14 @@ class DateTimeEncoder(json.JSONEncoder):
 
 @admin.register(Planner)
 class PlannerAdmin(admin.ModelAdmin):
+    class Media:
+        js = (
+            # 'fullcalendar/lib/jquery-ui.min.js',
+            # 'fullcalendar/lib/jquery.min.js',
+            'fullcalendar/lib/moment.min.js',
+            # 'fullcalendar/fullcalendar.js',
+            'fullcalendar/locale-all.js',
+        )
     change_list_template = 'admin/agenda_scheduler_change_list.html'
 
     # events = ast.literal_eval(serialize('json', Agenda.objects.all()))
