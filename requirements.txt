@@ -8,3 +8,4 @@ django-export-action>=0.1.1
 six>=1.11.0
 pytz>=2018.4
 django-tinymce4-lite>=1.7.1
+-e git+https://github.com/rodrigoamaral/django-fullcalendar.git#egg=django-fullcalendar
