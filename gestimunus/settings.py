@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'fullcalendar',
     'settings',
     'tools',
+    'tinymce',
 ]
 
 MIDDLEWARE_CLASSES = [

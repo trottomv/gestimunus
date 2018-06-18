@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'', admin.site.urls),
     url(r'^export_action/', include("export_action.urls", namespace="export_action")),
     url(r'^eventjson/', views.eventsFeed),
+    url(r'^tinymce/', include('tinymce.urls')),
 ]

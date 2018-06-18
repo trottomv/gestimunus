@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User, Group
 from django.contrib import admin
 from django.utils.translation import gettext as _
-
+from tinymce import HTMLField
 
 # Create your models here.
 class Diary(models.Model):
@@ -14,7 +14,8 @@ class Diary(models.Model):
     diaryType = models.ForeignKey('settings.DiariesType', on_delete=models.CASCADE)
     customer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
     title = models.CharField(max_length=200)
-    text = models.TextField()
+    # text = models.TextField()
+    text = HTMLField('Content')
     sign = models.ForeignKey('settings.Operator', on_delete=models.CASCADE)
     created_date = models.DateTimeField(default=timezone.now)
 
