@@ -58,7 +58,36 @@ class PlannerAdmin(admin.ModelAdmin):
     #     return context
 
 class CashMovementsAdmin(admin.ModelAdmin):
-    list_display = ('operation_date', 'cashdesk', 'causal', 'supplier',)
+    def get_queryset(self, request):
+        if not request.user.is_superuser:
+            qs = super(CashMovementsAdmin, self).get_queryset(request)
+            return qs.filter(author=request.user)
+        else:
+            qs = super(CashMovementsAdmin, self).get_queryset(request)
+            return qs
+
+
+    def save_model(self, request, obj, form, change):
+        obj.author = request.user
+        obj.save()
+
+    def save_formset(self, request, form, formset, change):
+        if formset.model == Comment:
+            instances = formset.save(commit=False)
+            for instance in instances:
+                instance.author = request.user
+                instance.save()
+        else:
+            formset.save()
+
+    def get_form(self, request, obj=None, **kwargs):
+        self.exclude = []
+        if not request.user.is_superuser:
+            self.exclude.append('recived') #here!
+        return super(CashMovementsAdmin, self).get_form(request, obj, **kwargs)
+
+    list_display = ('operation_date', 'annulled', 'cashdesk', 'causal', 'supplier', 'amount', 'customer', 'note', 'protocol', 'recived', 'sign', 'author',)
+    list_filter = ('customer', 'causal', 'cashdesk',)
 
 
 admin.site.register(Diary, DiaryAdmin)
