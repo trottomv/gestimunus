@@ -1,0 +1,51 @@
+{% extends "admin/change_list.html" %}
+
+{% block content_title %}
+    <span class="navbar-brand">Agenda Planner </span>
+{% endblock %}
+
+{% block result_list %}
+    {% load fullcalendar_tags %}
+
+    {% fullcalendar_css %}
+    {% fullcalendar_print_css %}
+    {% fullcalendar_jquery %}
+    {% fullcalendar_jquery_ui %}
+    {% fullcalendar_javascript %}
+
+    <script>
+    $(document).ready(function() {
+      $('#calendar').fullCalendar({
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,agendaWeek,agendaDay'
+        },
+        locale: 'it',
+        firstDay: 1,
+        defaultView: 'agendaWeek',
+        editable: false,
+        eventLimit: false,
+        events: "/eventjson",
+        timeFormat: 'H(:mm)', // uppercase H for 24-hour clock
+        eventColor: '#337ab7',
+        selectable: true,
+        // eventRender: function(event, element) {
+        //     $(element).tooltip({title: event.title});
+        // }
+        // eventClick: function(event) {
+        //   $(event.title).dialog();
+        //   if (event) {
+        //     // alert(event.title + ' ' + event.description);
+        //     // window.open(event.url);
+        //     return false;
+        //   }
+        // },
+      });
+    });
+    </script>
+    {% calendar %}
+
+{% endblock %}
+
+{% block pagination %}{% endblock %}
