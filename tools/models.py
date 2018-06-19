@@ -5,7 +5,8 @@ from django.contrib import admin
 from django.utils.translation import gettext as _
 from tinymce import HTMLField
 from gestimunus import settings
-from settings.models import CashDesk, MovementsCausal, Customer
+from settings.models import CashDesk, MovementsCausal, Customer #, Profile
+# from gestimunus import middleware
 
 # Create your models here.
 
@@ -73,11 +74,14 @@ class CashMovements(models.Model):
         null=True,
         editable=False
         )
+
+    # cdo = Profile.objects.values('cashdeskowner').filter(id=middleware.get_current_user())
+
     annulled = models.BooleanField(default=True, help_text='[Deselect for cancel entry]', verbose_name="Validation")
     recived = models.BooleanField(default=False, verbose_name="Recived")
     operation_date = models.DateField(verbose_name="Operation Date")
     document_date =  models.DateField(blank=True, null=True, verbose_name="Document Date")
-    cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service") #, limit_choices_to={'owners': '1'}
+    cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service") #limit choiche
     causal = models.ForeignKey('settings.MovementsCausal', verbose_name="Causal")
     supplier = models.CharField(max_length=200, verbose_name="Supplier")
     amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount")
