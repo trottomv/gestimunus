@@ -32,7 +32,7 @@ class CashDesk(models.Model):
 		self.save()
 
 	def __str__(self):
-		return u'%s %s' % (self.id, self.cashdesk)
+		return u'%s' % (self.cashdesk)
 
 
 class Profile(models.Model):
@@ -48,7 +48,7 @@ class Profile(models.Model):
     cd = CashDesk.objects.all()
     LIST = ()
     for index, value in enumerate(cd):
-        singcd = (str(index+1), str(value)[2:])
+        singcd = (str(index+1), str(value))
         LIST = LIST + (singcd,)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
