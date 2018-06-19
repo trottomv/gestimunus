@@ -85,7 +85,7 @@ class CashMovementsAdmin(admin.ModelAdmin):
             self.exclude.append('recived') #here!
         return super(CashMovementsAdmin, self).get_form(request, obj, **kwargs)
 
-    list_display = ('operation_date', 'annulled', 'cashdesk', 'causal', 'supplier', 'amount', 'customer', 'note', 'protocol', 'recived', 'sign', 'author',)
+    list_display = ('operation_date', 'annulled', 'supplier', 'amount', 'cashdesk', 'causal', 'note', 'protocol', 'recived', 'sign', 'author',)
     list_filter = ('customer', 'causal', 'cashdesk',)
 
 
