@@ -66,7 +66,6 @@ class CashMovementsAdmin(admin.ModelAdmin):
             qs = super(CashMovementsAdmin, self).get_queryset(request)
             return qs
 
-
     def save_model(self, request, obj, form, change):
         obj.author = request.user
         obj.save()
