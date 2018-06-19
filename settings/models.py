@@ -11,9 +11,9 @@ from django.utils.translation import gettext as _
 # Create your models here.
 
 class CashDesk(models.Model):
-    # class Meta:
-        # verbose_name_plural = _("Cash Desks")
-        # verbose_name = _("Cash Desk")
+	class Meta:
+		verbose_name_plural = _("Cash Desks")
+		verbose_name = _("Cash Desk")
 
 	u = User.objects.all()
 	LIST = ()
@@ -36,19 +36,19 @@ class CashDesk(models.Model):
 
 
 class Profile(models.Model):
-    STUDENT = 1
-    TEACHER = 2
-    SUPERVISOR = 3
+    MANAGER = 1
+    OPERATOR = 2
+    MED_OPERATOR = 3
     ROLE_CHOICES = (
-        (STUDENT, 'Student'),
-        (TEACHER, 'Teacher'),
-        (SUPERVISOR, 'Supervisor'),
+        (MANAGER, 'Manager'),
+        (OPERATOR, 'Social Operator'),
+        (MED_OPERATOR, 'OSS'),
     )
 
     cd = CashDesk.objects.all()
     LIST = ()
     for index, value in enumerate(cd):
-        singcd = (str(index), str(value))
+        singcd = (str(index+1), str(value)[2:])
         LIST = LIST + (singcd,)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
