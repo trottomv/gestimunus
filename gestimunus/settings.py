@@ -33,12 +33,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # 'django_admin_bootstrapped',
     # 'settings',
     # 'tools',
     # 'django_adminlte_theme',
     # 'django_adminlte',
+    # 'django_admin_bootstrapped',
     'adminlte',
+    # 'adminlte.apps.AdminlteConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -76,6 +77,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 'adminlte.utils.admin_config',
             ],
         },
     },
@@ -161,6 +163,16 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "gestimunus/static/"),
 ]
 
+
+## FULLCALENDAR
+
+# FULLCALENDAR = {
+    # 'css_url': os.path.join(BASE_DIR, 'gestimunus/static/admin/bootstrap/css/bootstrap.css.map'), # 'static/admin/bootstrap/css/bootstrap.css.map',
+    # 'print_css_url': <path_or_url_to_print_css_file>,
+    # 'javascript_url': <path_or_url_to_javascript_file>,
+    # 'jquery_url': <path_or_url_to_jquery_file>,
+    # 'jquery_ui_url': <path_or_url_to_jquery_ui_file>,
+# }
 
 ## LOG CONFIG
 # import logging.config

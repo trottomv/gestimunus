@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^eventjson/', views.eventsFeed),
     url(r'^tinymce/', include('tinymce.urls')),
     # url(r'^uploads/', views.(...)),
+    # url(r'^adminlte/', include('adminlte.urls')),
 ]

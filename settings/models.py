@@ -23,7 +23,7 @@ class CashDesk(models.Model):
 
 	cashdesk = models.CharField(max_length=200, verbose_name=_('Cash Desk'))
 	centercost = models.IntegerField(verbose_name=_('Center Cost'))
-	owners = MultiSelectField(choices=LIST, verbose_name=_('Owners'))
+	# owners = MultiSelectField(choices=LIST, verbose_name=_('Owners'))
 	# owners = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 	# owners = models.ForeignKey(to=User, null=True, blank=True)
 
@@ -55,7 +55,8 @@ class Profile(models.Model):
     location = models.CharField(max_length=30, blank=True)
     birthdate = models.DateField(null=True, blank=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, null=True, blank=True)
-    cashdeskowner = MultiSelectField(choices=LIST, null=True, blank=True)
+    # cashdeskowner = MultiSelectField(choices=LIST, null=True, blank=True)
+    cashdeskowner = models.ManyToManyField(CashDesk)
 
     def __str__(self):  # __unicode__ for Python 2
         return self.user.username
