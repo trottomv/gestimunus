@@ -34,10 +34,11 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     # 'django_admin_bootstrapped',
-    'settings',
-    'tools',
-    'django_adminlte',
-    'django_adminlte_theme',
+    # 'settings',
+    # 'tools',
+    # 'django_adminlte_theme',
+    # 'django_adminlte',
+    'adminlte',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,8 +48,8 @@ INSTALLED_APPS = [
     'rangefilter',
     'export_action',
     'fullcalendar',
-    # 'settings',
-    # 'tools',
+    'settings',
+    'tools',
     'tinymce',
 ]
 
