@@ -1,7 +1,7 @@
 from django.contrib import admin
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from django.contrib.admin import DateFieldListFilter
-from .models import Diary, Agenda, Planner, CashMovements
+from .models import Diary, Agenda, Planner, CashMovements, CashMovementsCustomerDetails
 # import serialize
 import ast
 from datetime import datetime
@@ -41,7 +41,7 @@ class PlannerAdmin(admin.ModelAdmin):
             # 'fullcalendar/locale-all.js',
             # 'admin/bootstrap/css/bootstrap.css'
         )
-    change_list_template = 'admin/agenda_scheduler_change_list.html'
+    change_list_template = 'adminLTE/agenda_scheduler_change_list.html'
 
     # events = ast.literal_eval(serialize('json', Agenda.objects.all()))
     # events = ast.literal_eval(data)
@@ -58,6 +58,13 @@ class PlannerAdmin(admin.ModelAdmin):
     #         context['end']  = i['eventEnd']
     #     # context['events'] = ast.literal_eval(json.dumps([dict(item) for item in Agenda.objects.all().values('eventTitle', 'eventStart', 'eventEnd')], cls=DateTimeEncoder))
     #     return context
+
+class CashMovementsAdminInline(admin.TabularInline):
+    model = CashMovementsCustomerDetails
+    can_delete = False
+    verbose_name_plural = 'CM Details'
+
+
 
 class CashMovementsAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
@@ -89,7 +96,7 @@ class CashMovementsAdmin(admin.ModelAdmin):
 
     list_display = ('operation_date', 'annulled', 'supplier', 'amount', 'cashdesk', 'causal', 'note', 'protocol', 'recived', 'sign', 'author',)
     list_filter = ('customer', 'causal', 'cashdesk',)
-
+    inlines = [CashMovementsAdminInline, ]
 
 admin.site.register(Diary, DiaryAdmin)
 admin.site.register(Agenda, AgendaAdmin)

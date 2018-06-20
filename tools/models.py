@@ -70,7 +70,7 @@ class CashMovements(models.Model):
     author = models.ForeignKey(
         User,
         related_name='entries',
-        blank=True,
+        # blank=True,
         null=True,
         editable=False
         )
@@ -101,3 +101,20 @@ class CashMovements(models.Model):
     def __str__(self):
         # return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
         return u'%s' % (self.protocol)
+
+class CashMovementsCustomerDetails(models.Model):
+
+	# operation_date = models.DateField(verbose_name="Operation Date")
+	# document_date =  models.DateField(blank=True, null=True, verbose_name="Document Date")
+	cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service") #limit choiche
+	causal = models.ForeignKey('settings.MovementsCausal', verbose_name="Causal")
+	supplier = models.CharField(max_length=200, verbose_name="Supplier")
+	amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount")
+	# customer = models.CharField(max_length=200, blank=True)
+	customer = models.ForeignKey('settings.Customer', null=True, blank=True, editable=False, verbose_name="Service Customer")
+	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
+	sign = models.CharField(max_length=200, blank=True, verbose_name="Sign")
+	# sign = models.ForeignKey('giona_admin.Operator', on_delete=models.CASCADE, verbose_name="Firma")
+	# protocol = models.AutoField(primary_key=True)
+	# protocol = models.IntegerField(unique=True, editable=False, default=protocolgen)
+	prot = models.ForeignKey('CashMovements')
