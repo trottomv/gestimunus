@@ -56,7 +56,7 @@ class Profile(models.Model):
     birthdate = models.DateField(null=True, blank=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, null=True, blank=True)
     # cashdeskowner = MultiSelectField(choices=LIST, null=True, blank=True)
-    cashdeskowner = models.ManyToManyField(CashDesk)
+    cashdeskowner = models.ManyToManyField(CashDesk, blank=True)
 
     def __str__(self):  # __unicode__ for Python 2
         return self.user.username
