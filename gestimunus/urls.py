@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from gestimunus import settings
 
 from tools import views
 
@@ -26,4 +28,5 @@ urlpatterns = [
     url(r'^tinymce/', include('tinymce.urls')),
     # url(r'^uploads/', views.(...)),
     # url(r'^adminlte/', include('adminlte.urls')),
+    # url(r'^static/(?P<path>.*)$', 'django.views.static.serve', include({"document_root": settings.STATIC_ROOT}),
 ]

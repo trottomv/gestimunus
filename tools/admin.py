@@ -39,6 +39,7 @@ class PlannerAdmin(admin.ModelAdmin):
             # 'fullcalendar/lib/moment.min.js',
             # 'fullcalendar/fullcalendar.js',
             # 'fullcalendar/locale-all.js',
+            # 'admin/bootstrap/css/bootstrap.css'
         )
     change_list_template = 'admin/agenda_scheduler_change_list.html'
 

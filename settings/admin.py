@@ -12,7 +12,7 @@ class ProfileInline(admin.StackedInline):
     fk_name = 'user'
 
 class CustomUserAdmin(UserAdmin):
-    inlines = (ProfileInline, )
+    inlines = (ProfileInline,)
 
     def get_inline_instances(self, request, obj=None):
         if not obj:

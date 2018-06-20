@@ -46,10 +46,10 @@ class Profile(models.Model):
     )
 
     cd = CashDesk.objects.all()
-    LIST = ()
-    for index, value in enumerate(cd):
-        singcd = (str(index+1), str(value))
-        LIST = LIST + (singcd,)
+    # LIST = ()
+    # for index, value in enumerate(cd):
+    #     singcd = (str(index+1), str(value))
+    #     LIST = LIST + (singcd,)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=30, blank=True)
