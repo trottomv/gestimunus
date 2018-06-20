@@ -62,7 +62,7 @@ class PlannerAdmin(admin.ModelAdmin):
 class CashMovementsAdminInline(admin.TabularInline):
     model = CashMovementsCustomerDetails
     can_delete = False
-    verbose_name_plural = 'CM Details'
+    verbose_name_plural = 'Customer Details'
 
 
 
