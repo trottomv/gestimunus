@@ -80,7 +80,7 @@ class CashMovementsAdmin(admin.ModelAdmin):
         obj.save()
 
     def save_formset(self, request, form, formset, change):
-        if formset.model == Comment:
+        if formset.model == CashMovements:
             instances = formset.save(commit=False)
             for instance in instances:
                 instance.author = request.user
