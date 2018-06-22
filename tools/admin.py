@@ -41,7 +41,7 @@ class PlannerAdmin(admin.ModelAdmin):
             # 'fullcalendar/locale-all.js',
             # 'admin/bootstrap/css/bootstrap.css'
         )
-    change_list_template = 'adminLTE/agenda_scheduler_change_list.html'
+    change_list_template = 'admin/agenda_scheduler_change_list.html'
 
     # events = ast.literal_eval(serialize('json', Agenda.objects.all()))
     # events = ast.literal_eval(data)
@@ -63,8 +63,23 @@ class CashMovementsAdminInline(admin.TabularInline):
     model = CashMovementsCustomerDetails
     can_delete = False
     verbose_name_plural = 'Customer Details'
-
-
+    extra = 1
+    class Media:
+        js = (
+            # 'js/clonesupplier.js',
+            # 'fullcalendar/lib/jquery.min.js',
+            # 'fullcalendar/lib/moment.min.js',
+            # 'fullcalendar/fullcalendar.js',
+            # 'fullcalendar/locale-all.js',
+            # 'admin/bootstrap/css/bootstrap.css'
+        )
+    def get_extra (self, request, obj=None, **kwargs):
+        """Dynamically sets the number of extra forms. 0 if the related object
+        already exists or the extra configuration otherwise."""
+        if obj:
+            # Don't add any extra forms if the related object already exists.
+            return 0
+        return self.extra
 
 class CashMovementsAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
