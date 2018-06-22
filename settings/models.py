@@ -23,6 +23,7 @@ class CashDesk(models.Model):
 
 	cashdesk = models.CharField(max_length=200, verbose_name=_('Cash Desk'))
 	centercost = models.IntegerField(verbose_name=_('Center Cost'))
+	# owner = models.ManyToManyField(CashDesk, null=True)
 	# owners = MultiSelectField(choices=LIST, verbose_name=_('Owners'))
 	# owners = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 	# owners = models.ForeignKey(to=User, null=True, blank=True)
@@ -52,8 +53,8 @@ class Profile(models.Model):
     #     LIST = LIST + (singcd,)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    location = models.CharField(max_length=30, blank=True)
-    birthdate = models.DateField(null=True, blank=True)
+    # location = models.CharField(max_length=30, blank=True)
+    # birthdate = models.DateField(null=True, blank=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, null=True, blank=True)
     # cashdeskowner = MultiSelectField(choices=LIST, null=True, blank=True)
     cashdeskowner = models.ManyToManyField(CashDesk, blank=True)

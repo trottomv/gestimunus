@@ -20,6 +20,9 @@ class DateTimeEncoder(json.JSONEncoder):
 
 
 def eventsFeed(request):
+    # current_user = request.user
+    # print current_user.id
+    
     # from django.utils.timezone import utc
     # from django.core.serializers.json import DjangoJSONEncoder
 

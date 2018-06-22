@@ -63,36 +63,32 @@ class Planner(Agenda):
         verbose_name = _("Agenda")
 
 class CashMovements(models.Model):
+	# CD = []
 
     class Meta:
         verbose_name_plural = "Cash Movements"
 
+
     author = models.ForeignKey(
         User,
         related_name='entries',
-        # blank=True,
         null=True,
         editable=False
         )
-
-    # cdo = Profile.objects.values('cashdeskowner').filter(id=middleware.get_current_user())
 
     annulled = models.BooleanField(default=True, help_text='[Deselect for cancel entry]', verbose_name="Validation")
     recived = models.BooleanField(default=False, verbose_name="Recived")
     operation_date = models.DateField(verbose_name="Operation Date", default=timezone.now)
     document_date =  models.DateField(blank=True, null=True, verbose_name="Document Date")
-    cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service") #limit choiche
+    cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service") #, limit_choices_to={"cashdesk": "Comunita' Disabili"}) #limit choiche
     causal = models.ForeignKey('settings.MovementsCausal', verbose_name="Causal")
-    supplier = models.CharField(max_length=200, verbose_name="Supplier")
+    supplier = models.CharField(max_length=200, verbose_name="Supplier", null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount")
-    # customer = models.CharField(max_length=200, blank=True)
     customer = models.ForeignKey('settings.Customer', null=True, blank=True, editable=False, verbose_name="Service Customer")
     note = models.CharField(max_length=200, blank=True, verbose_name="Note")
     # sign = models.CharField(max_length=200, blank=True, verbose_name="Sign")
     sign = models.ForeignKey('settings.Operator', on_delete=models.CASCADE, verbose_name="Sign")
-    # protocol = models.AutoField(primary_key=True)
     protocol = models.IntegerField(unique=True, editable=False, default=protocolgen)
-    # sign_id = models.AutoField(primary_key=True)
 
     def publish(self):
         self.published_date = timezone.now()
@@ -104,12 +100,22 @@ class CashMovements(models.Model):
 
 class CashMovementsCustomerDetails(models.Model):
 
+	# @classmethod
+	# def get_channel_list(cls, acc):
+	# 	return cls.objects.filter(accountid=acc).values_list('name', flat=True)
+	# def qs_supplier():
+	# 	supplier = CashMovements.objects.get(pk=)
+	# 	return self
+
+
+	prot = models.ForeignKey('CashMovements')
 	operation_date = models.DateField(default=timezone.now, editable=False) # models.DateField(verbose_name="Operation Date")
 	# document_date =  models.DateField(blank=True, null=True, verbose_name="Document Date")
 	# cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service") #limit choiche
 	# causal = models.ForeignKey('settings.MovementsCausal', verbose_name="Causal")
 	customer = models.ForeignKey('settings.Customer', null=True, blank=True, verbose_name="Service Customer")
-	supplier = models.CharField(max_length=200, verbose_name="Supplier")
+	supplier = models.CharField(max_length=200, verbose_name="Supplier", null=True)
+	# supplier = models.ForeignKey('CashMovements' .objects.get(id=prot))
 	amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount", blank=True)
 	# customer = models.CharField(max_length=200, blank=True)
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
@@ -117,4 +123,11 @@ class CashMovementsCustomerDetails(models.Model):
 	# sign = models.ForeignKey('giona_admin.Operator', on_delete=models.CASCADE, verbose_name="Firma")
 	# protocol = models.AutoField(primary_key=True)
 	# protocol = models.IntegerField(unique=True, editable=False, default=protocolgen)
-	prot = models.ForeignKey('CashMovements')
+
+	def publish(self):
+		self.published_date = timezone.now()
+		self.save()
+
+	def __str__(self):
+		# return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
+		return u'%s' % (self.prot)
