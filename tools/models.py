@@ -101,6 +101,9 @@ class CashMovements(models.Model):
 
 class CashMovementsCustomerDetails(models.Model):
 
+	class Meta:
+		verbose_name_plural = "Cash Movements Customer Details"
+
 	# @classmethod
 	# def get_channel_list(cls, acc):
 	# 	return cls.objects.filter(accountid=acc).values_list('name', flat=True)
