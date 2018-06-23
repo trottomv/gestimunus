@@ -117,11 +117,14 @@ class CashMovementsAdmin(admin.ModelAdmin):
         if db_field.name == "causal":
             if not request.user.is_superuser:
                 kwargs["queryset"] = MovementsCausal.objects.filter(admin=False)
-        #
+
         if db_field.name == "cashdesk":
             if not request.user.is_superuser:
-                kwargs["queryset"] = CashDesk.objects.filter(id=current_user_profile)
-
+                kwargs["queryset"] = CashDesk.objects.filter(
+                    id__in=Profile.cashdeskowner.through.objects.filter(
+                    profile_id=current_user_profile
+                    ).values('cashdesk_id')
+                )
         # print current_user.id
         # print current_user_profile
 

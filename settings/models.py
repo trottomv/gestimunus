@@ -26,7 +26,7 @@ class CashDesk(models.Model):
 	# owner = models.ManyToManyField(CashDesk, null=True)
 	# owners = MultiSelectField(choices=LIST, verbose_name=_('Owners'))
 	# owners = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-	# owners = models.ForeignKey(to=User, null=True, blank=True)
+	# owners = models.ManyToManyField('Profile', blank=True)
 
 	def publish(self):
 		self.published_date = timezone.now()
