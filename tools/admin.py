@@ -91,7 +91,8 @@ class CashMovementsAdmin(admin.ModelAdmin):
             return qs
 
     def save_model(self, request, obj, form, change):
-        obj.author = request.user
+        if getattr(obj, 'author', None) is None:
+            obj.author = request.user
         obj.save()
 
     def save_formset(self, request, form, formset, change):
@@ -108,6 +109,12 @@ class CashMovementsAdmin(admin.ModelAdmin):
         if not request.user.is_superuser:
             self.exclude.append('recived') #here!
         return super(CashMovementsAdmin, self).get_form(request, obj, **kwargs)
+
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     if db_field.name == "cashdesk_id":
+    #         kwargs["queryset"] = Profile.objects.filter(user_id=request.current_user)
+    #     return super(CashMovementsAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+
 
     list_display = ('operation_date', 'annulled', 'supplier', 'amount', 'cashdesk', 'causal', 'note', 'protocol', 'recived', 'sign', 'author',)
     list_filter = ('customer', 'causal', 'cashdesk',)
