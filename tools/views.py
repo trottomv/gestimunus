@@ -6,6 +6,23 @@ import ast
 import json
 from django.http import HttpResponse
 import pytz
+#
+# from django.shortcuts import render, redirect
+# from .forms import CashMovementsForm
+# from django.contrib.auth.decorators import login_required
+#
+# @login_required
+# def new_cashmovements(request):
+#     if request.method == 'POST':
+#         form = CashMovementsForm(request.user, request.POST)
+#         if form.is_valid():
+#             cashdesk = form.save(commit=False)
+#             cashdesk.user = request.user
+#             cashdesk.save()
+#             return redirect('cashmovements_list')
+#     else:
+#         form = CashMovementsForm(request.user)
+#     return render(request, 'tools/cashmovements/cashmovements_form.html', {'form': form})
 
 cet = pytz.timezone('CET')
 offset = cet.utcoffset(datetime.now())
@@ -22,7 +39,7 @@ class DateTimeEncoder(json.JSONEncoder):
 def eventsFeed(request):
     # current_user = request.user
     # print current_user.id
-    
+
     # from django.utils.timezone import utc
     # from django.core.serializers.json import DjangoJSONEncoder
 
