@@ -17,6 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from gestimunus import settings
+from django.conf.urls.static import static
 
 from tools import views
 
@@ -28,5 +29,12 @@ urlpatterns = [
     url(r'^tinymce/', include('tinymce.urls')),
     # url(r'^uploads/', views.(...)),
     # url(r'^adminlte/', include('adminlte.urls')),
-    # url(r'^static/(?P<path>.*)$', 'django.views.static.serve', include({"document_root": settings.STATIC_ROOT}),
+    # url(r'^static/(?P<path>.*)$', 'django.views.static.serve', include({"document_root": settings.STATIC_ROOT})),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+if settings.DEBUG==False:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
