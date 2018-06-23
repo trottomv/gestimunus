@@ -46,13 +46,13 @@ class Profile(models.Model):
         (MED_OPERATOR, 'OSS'),
     )
 
-    cd = CashDesk.objects.all()
+    # cd = CashDesk.objects.all()
     # LIST = ()
     # for index, value in enumerate(cd):
     #     singcd = (str(index+1), str(value))
     #     LIST = LIST + (singcd,)
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User) #, on_delete=models.CASCADE)
     # location = models.CharField(max_length=30, blank=True)
     # birthdate = models.DateField(null=True, blank=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, null=True, blank=True)
@@ -73,6 +73,7 @@ class MovementsCausal(models.Model):
 		verbose_name_plural = _("Movements Causals")
 
 	causal = models.CharField(max_length=200)
+	admin = models.BooleanField(default=False, help_text='[Select for assign only to admins]', verbose_name="Admin Only", blank=True)
 
 	def publish(self):
 		self.published_date = timezone.now()
