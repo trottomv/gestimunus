@@ -2,6 +2,7 @@ from django.contrib import admin
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from django.contrib.admin import DateFieldListFilter
 from .models import Diary, Agenda, Planner, CashMovements, CashMovementsCustomerDetails
+from settings.models import MovementsCausal
 # import serialize
 import ast
 from datetime import datetime
@@ -110,10 +111,11 @@ class CashMovementsAdmin(admin.ModelAdmin):
             self.exclude.append('recived') #here!
         return super(CashMovementsAdmin, self).get_form(request, obj, **kwargs)
 
-    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
-    #     if db_field.name == "cashdesk_id":
-    #         kwargs["queryset"] = Profile.objects.filter(user_id=request.current_user)
-    #     return super(CashMovementsAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "causal":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = MovementsCausal.objects.filter(admin=False)
+        return super(CashMovementsAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
     list_display = ('operation_date', 'annulled', 'supplier', 'amount', 'cashdesk', 'causal', 'note', 'protocol', 'recived', 'sign', 'author',)
