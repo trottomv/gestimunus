@@ -3,7 +3,6 @@ from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from django.contrib.admin import DateFieldListFilter
 from .models import Diary, Agenda, Planner, CashMovements, CashMovementsCustomerDetails
 from settings.models import MovementsCausal, CashDesk, Profile
-# import serialize
 import ast
 from datetime import datetime
 import json
@@ -33,32 +32,9 @@ class DateTimeEncoder(json.JSONEncoder):
 
 @admin.register(Planner)
 class PlannerAdmin(admin.ModelAdmin):
-    class Media:
-        js = (
-            # 'fullcalendar/lib/jquery-ui.min.js',
-            # 'fullcalendar/lib/jquery.min.js',
-            # 'fullcalendar/lib/moment.min.js',
-            # 'fullcalendar/fullcalendar.js',
-            # 'fullcalendar/locale-all.js',
-            # 'admin/bootstrap/css/bootstrap.css'
-        )
+
     change_list_template = 'admin/agenda_scheduler_change_list.html'
 
-    # events = ast.literal_eval(serialize('json', Agenda.objects.all()))
-    # events = ast.literal_eval(data)
-    # date_hierarchy = 'eventStart'
-    # form_class = Agenda
-
-    # def get_context_data(self, **kwargs):
-    #     context = super(AgendaAdmin, self).get_context_data(**kwargs)
-    #     events = ast.literal_eval(json.dumps([dict(item) for item in Agenda.objects.all().values('eventTitle', 'eventStart', 'eventEnd')], cls=DateTimeEncoder))
-    #     for i in events:
-    #         import pdb; pdb.set_trace()
-    #         context['title'] = i['eventTitle']
-    #         context['start'] = i['eventStart']
-    #         context['end']  = i['eventEnd']
-    #     # context['events'] = ast.literal_eval(json.dumps([dict(item) for item in Agenda.objects.all().values('eventTitle', 'eventStart', 'eventEnd')], cls=DateTimeEncoder))
-    #     return context
 
 class CashMovementsAdminInline(admin.TabularInline):
     model = CashMovementsCustomerDetails
@@ -68,11 +44,6 @@ class CashMovementsAdminInline(admin.TabularInline):
     class Media:
         js = (
             # 'js/clonesupplier.js',
-            # 'fullcalendar/lib/jquery.min.js',
-            # 'fullcalendar/lib/moment.min.js',
-            # 'fullcalendar/fullcalendar.js',
-            # 'fullcalendar/locale-all.js',
-            # 'admin/bootstrap/css/bootstrap.css'
         )
     def get_extra (self, request, obj=None, **kwargs):
         """Dynamically sets the number of extra forms. 0 if the related object
@@ -125,8 +96,6 @@ class CashMovementsAdmin(admin.ModelAdmin):
                     profile_id=current_user_profile
                     ).values('cashdesk_id')
                 )
-        # print current_user.id
-        # print current_user_profile
 
         return super(CashMovementsAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 

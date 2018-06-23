@@ -24,9 +24,6 @@ class CashDesk(models.Model):
 	cashdesk = models.CharField(max_length=200, verbose_name=_('Cash Desk'))
 	centercost = models.IntegerField(verbose_name=_('Center Cost'))
 	# owner = models.ManyToManyField(CashDesk, null=True)
-	# owners = MultiSelectField(choices=LIST, verbose_name=_('Owners'))
-	# owners = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-	# owners = models.ManyToManyField('Profile', blank=True)
 
 	def publish(self):
 		self.published_date = timezone.now()
@@ -46,17 +43,8 @@ class Profile(models.Model):
         (MED_OPERATOR, 'OSS'),
     )
 
-    # cd = CashDesk.objects.all()
-    # LIST = ()
-    # for index, value in enumerate(cd):
-    #     singcd = (str(index+1), str(value))
-    #     LIST = LIST + (singcd,)
-
     user = models.OneToOneField(User) #, on_delete=models.CASCADE)
-    # location = models.CharField(max_length=30, blank=True)
-    # birthdate = models.DateField(null=True, blank=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, null=True, blank=True)
-    # cashdeskowner = MultiSelectField(choices=LIST, null=True, blank=True)
     cashdeskowner = models.ManyToManyField(CashDesk, blank=True)
 
     def __str__(self):  # __unicode__ for Python 2
@@ -86,8 +74,6 @@ class Operator(models.Model):
 	class Meta:
 		verbose_name_plural = _("Operators")
 
-    # author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-	# sign_id = models.AutoField(primary_key=True)
 	name = models.CharField(primary_key=True, max_length=200)
 	surname = models.CharField(max_length=200)
 	qualify = models.CharField(max_length=200)
@@ -105,8 +91,6 @@ class DiariesType(models.Model):
     # class Meta:
     # 	verbose_name_plural = _("Diary Types")
 
-    # author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-	# sign_id = models.AutoField(primary_key=True)
 	diarytype = models.CharField(primary_key=True, max_length=200)
 	created_date = models.DateTimeField(default=timezone.now)
 
@@ -122,7 +106,6 @@ class Customer(models.Model):
 	class Meta:
 		verbose_name_plural = _("Service Customers")
 
-	# custid = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=200)
 	surname = models.CharField(max_length=200)
 	birthday = models.DateField()
