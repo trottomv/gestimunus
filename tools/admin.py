@@ -102,7 +102,7 @@ class CashMovementsAdmin(admin.ModelAdmin):
 
 
     list_display = ('operation_date', 'annulled', 'supplier', 'amount', 'cashdesk', 'causal', 'note', 'protocol', 'recived', 'sign', 'author',)
-    list_filter = ('causal', ('cashdesk', RelatedOnlyFieldListFilter))
+    list_filter = (('causal', RelatedOnlyFieldListFilter), ('cashdesk', RelatedOnlyFieldListFilter))
     inlines = [CashMovementsAdminInline, ]
     # cashdesk_filter_related_only=True
 
