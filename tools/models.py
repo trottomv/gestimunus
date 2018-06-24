@@ -113,3 +113,40 @@ class CashMovementsCustomerDetails(models.Model):
 	def __str__(self):
 		# return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
 		return u'%s' % (self.prot)
+
+class PharmaceuticalInventoryMovements(models.Model):
+
+	class Meta:
+		verbose_name_plural = "Pharmaceutical Inventory Movements"
+	IN = 1
+	OUT = 2
+	IN_OUT = (
+		(IN, 'LOAD'),
+		(OUT, 'DISCHARGE'),
+	)
+
+
+	author = models.ForeignKey(
+			User,
+			null=True,
+			editable=False
+			)
+
+	load_discharge = models.PositiveSmallIntegerField(choices=IN_OUT, null=True, verbose_name="Load / Discharge")
+	annulled = models.BooleanField(default=True, help_text='[Deselect for cancel entry]', verbose_name="Validation")
+	operation_date = models.DateField(verbose_name="Operation Date", default=timezone.now)
+	cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service")
+	customer = models.ForeignKey('settings.Customer', null=True, blank=True, editable=False, verbose_name="Service Customer")
+	# drug = models.ForeignKey('settings.Customer', verbose_name="Generic Drug")
+	drug = models.CharField(max_length=200, blank=True, verbose_name="Generic Drug")
+	quantity = models.IntegerField()
+	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
+	sign = models.ForeignKey('settings.Operator', on_delete=models.CASCADE, verbose_name="Sign")
+
+	def publish(self):
+		self.published_date = timezone.now()
+		self.save()
+
+	def __str__(self):
+		# return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
+		return u'%s' % (self.id)

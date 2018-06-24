@@ -1,7 +1,7 @@
 from django.contrib import admin
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from django.contrib.admin import DateFieldListFilter
-from .models import Diary, Agenda, Planner, CashMovements, CashMovementsCustomerDetails
+from .models import Diary, Agenda, Planner, CashMovements, CashMovementsCustomerDetails, PharmaceuticalInventoryMovements
 from settings.models import MovementsCausal, CashDesk, Profile
 import ast
 from datetime import datetime
@@ -110,8 +110,27 @@ class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
     list_display = ('prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
     list_filter = ('customer', ('operation_date', DateRangeFilter))
 
+class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        current_user = request.user
+        current_user_profile = Profile.objects.filter(user_id=current_user.id)
+
+        if db_field.name == "cashdesk":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = CashDesk.objects.filter(
+                    id__in=Profile.cashdeskowner.through.objects.filter(
+                    profile_id=current_user_profile
+                    ).values('cashdesk_id')
+                )
+
+        return super(PharmaceuticalInventoryMovementsAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+    list_display = ('operation_date', 'load_discharge', 'annulled', 'cashdesk', 'customer', 'drug', 'quantity', 'note', 'sign')
+    list_filter = (('operation_date', DateRangeFilter), 'customer', 'cashdesk')
+
 
 admin.site.register(Diary, DiaryAdmin)
 admin.site.register(Agenda, AgendaAdmin)
 admin.site.register(CashMovements, CashMovementsAdmin)
 admin.site.register(CashMovementsCustomerDetails, CashMovementsCustomerDetailsAdmin)
+admin.site.register(PharmaceuticalInventoryMovements, PharmaceuticalInventoryMovementsAdmin)
