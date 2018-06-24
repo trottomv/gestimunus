@@ -6,6 +6,7 @@ from settings.models import MovementsCausal, CashDesk, Profile
 import ast
 from datetime import datetime
 import json
+from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 
 # Register your models here.
 
@@ -101,8 +102,9 @@ class CashMovementsAdmin(admin.ModelAdmin):
 
 
     list_display = ('operation_date', 'annulled', 'supplier', 'amount', 'cashdesk', 'causal', 'note', 'protocol', 'recived', 'sign', 'author',)
-    list_filter = ('customer', 'causal', 'cashdesk',)
+    list_filter = ('causal', ('cashdesk', RelatedOnlyFieldListFilter))
     inlines = [CashMovementsAdminInline, ]
+    # cashdesk_filter_related_only=True
 
 class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
     list_display = ('prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
