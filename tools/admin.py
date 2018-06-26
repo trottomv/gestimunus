@@ -38,13 +38,14 @@ class PlannerAdmin(admin.ModelAdmin):
 
 
 class CashMovementsAdminInline(admin.TabularInline):
+
     model = CashMovementsCustomerDetails
     can_delete = False
     verbose_name_plural = 'Customer Details'
     extra = 1
     class Media:
         js = (
-            # 'js/clonesupplier.js',
+            'js/clonesupplier.js',
         )
     def get_extra (self, request, obj=None, **kwargs):
         """Dynamically sets the number of extra forms. 0 if the related object
@@ -107,6 +108,7 @@ class CashMovementsAdmin(admin.ModelAdmin):
     # cashdesk_filter_related_only=True
 
 class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
+    
     list_display = ('prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
     list_filter = ('customer', ('operation_date', DateRangeFilter))
 
@@ -122,7 +124,7 @@ class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if getattr(obj, 'author', None) is None:
             obj.author = request.user
-        obj.save()
+        # obj.save()
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         current_user = request.user
