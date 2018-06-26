@@ -18,8 +18,13 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from gestimunus import settings
 from django.conf.urls.static import static
+from django.views.i18n import JavaScriptCatalog
 
 from tools import views
+
+js_info_dict = {
+    'packages': ('recurrence', ),
+}
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
@@ -27,6 +32,7 @@ urlpatterns = [
     url(r'^export_action/', include("export_action.urls", namespace="export_action")),
     url(r'^eventjson/', views.eventsFeed),
     url(r'^tinymce/', include('tinymce.urls')),
+    url(r'^jsi18n/$', JavaScriptCatalog.as_view(), js_info_dict),
     # url(r'^uploads/', views.(...)),
     # url(r'^adminlte/', include('adminlte.urls')),
     # url(r'^static/(?P<path>.*)$', 'django.views.static.serve', include({"document_root": settings.STATIC_ROOT})),

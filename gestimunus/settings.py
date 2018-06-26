@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'settings',
     'tools',
     'tinymce',
+    'recurrence',
 ]
 
 MIDDLEWARE_CLASSES = [

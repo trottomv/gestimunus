@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.utils.translation import gettext as _
 from tinymce import HTMLField
 from gestimunus import settings
+from recurrence.fields import RecurrenceField
 from settings.models import CashDesk, MovementsCausal, Customer, Profile
 
 # Create your models here.
@@ -14,46 +15,48 @@ def protocolgen():
 
 
 class Diary(models.Model):
-    class Meta:
-        verbose_name_plural = _("Diaries")
-        verbose_name = _("Diary")
+	class Meta:
+		verbose_name_plural = _("Diaries")
+		verbose_name = _("Diary")
 
-    diaryType = models.ForeignKey('settings.DiariesType', on_delete=models.CASCADE)
-    customer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
-    title = models.CharField(max_length=200)
-    # text = models.TextField()
-    text = HTMLField('Content')
-    upload = models.FileField(upload_to=settings.STATIC_UPLOAD, null=True)
-    sign = models.ForeignKey('settings.Operator', on_delete=models.CASCADE)
-    created_date = models.DateTimeField(default=timezone.now)
+	diaryType = models.ForeignKey('settings.DiariesType', on_delete=models.CASCADE)
+	customer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
+	title = models.CharField(max_length=200)
+	# text = models.TextField()
+	text = HTMLField('Content')
+	upload = models.FileField(upload_to=settings.STATIC_UPLOAD, null=True)
+	sign = models.ForeignKey('settings.Operator', on_delete=models.CASCADE)
+	created_date = models.DateTimeField(default=timezone.now)
 
-    def publish(self):
-        self.published_date = timezone.now()
-        self.save()
+	def publish(self):
+		self.published_date = timezone.now()
+		self.save()
 
-    def __str__(self):
-        # return u'%s' % (self.diary_id)
-        return u'%s %s' % (self.created_date.strftime("%Y-%m-%d"), self.title, )
+	def __str__(self):
+		# return u'%s' % (self.diary_id)
+		return u'%s %s' % (self.created_date.strftime("%Y-%m-%d"), self.title, )
 
 class Agenda(models.Model):
 
-    class Meta:
-    	verbose_name_plural = _("Events")
-        verbose_name = _("Event")
+	class Meta:
+		verbose_name_plural = _("Events")
+		verbose_name = _("Event")
 
-    eventTitle = models.CharField(max_length=200)
-    eventCustomer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
-    eventDescription = models.TextField(null=True)
-    eventStart = models.DateTimeField()
-    eventEnd = models.DateTimeField()
+	eventTitle = models.CharField(max_length=200)
+	eventCustomer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
+	eventDescription = models.TextField(null=True)
+	eventStart = models.DateTimeField()
+	eventEnd = models.DateTimeField()
+	recurrence = RecurrenceField(null=True)
 
-    def publish(self):
-        self.published_date = timezone.now()
-        self.save()
 
-    def __str__(self):
-        return u'%s' % (self.eventTitle)
-        # return u'%s %s' % (self.title, self.created_date)
+	def publish(self):
+		self.published_date = timezone.now()
+		self.save()
+
+	def __str__(self):
+		return u'%s' % (self.eventTitle)
+	    # return u'%s %s' % (self.title, self.created_date)
 
 class Planner(Agenda):
     class Meta:
