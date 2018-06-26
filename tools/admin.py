@@ -111,6 +111,19 @@ class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
     list_filter = ('customer', ('operation_date', DateRangeFilter))
 
 class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        if not request.user.is_superuser:
+            qs = super(PharmaceuticalInventoryMovementsAdmin, self).get_queryset(request)
+            return qs.filter(author=request.user)
+        else:
+            qs = super(PharmaceuticalInventoryMovementsAdmin, self).get_queryset(request)
+            return qs
+
+    def save_model(self, request, obj, form, change):
+        if getattr(obj, 'author', None) is None:
+            obj.author = request.user
+        obj.save()
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         current_user = request.user
         current_user_profile = Profile.objects.filter(user_id=current_user.id)
@@ -125,8 +138,8 @@ class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
 
         return super(PharmaceuticalInventoryMovementsAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    list_display = ('operation_date', 'load_discharge', 'annulled', 'cashdesk', 'customer', 'drug', 'quantity', 'note', 'sign')
-    list_filter = (('operation_date', DateRangeFilter), 'customer', 'cashdesk')
+    list_display = ('operation_date', 'load_discharge', 'annulled', 'cashdesk', 'customer', 'drug', 'quantity', 'note', 'sign', 'author')
+    list_filter = (('customer', RelatedOnlyFieldListFilter), ('cashdesk', RelatedOnlyFieldListFilter), ('operation_date', DateRangeFilter))
 
 
 admin.site.register(Diary, DiaryAdmin)

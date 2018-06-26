@@ -58,7 +58,7 @@ class Agenda(models.Model):
 class Planner(Agenda):
     class Meta:
         proxy = True
-    	verbose_name_plural = _("Planner")
+    	verbose_name_plural = _("Events Planner")
         verbose_name = _("Agenda")
 
 class CashMovements(models.Model):
@@ -68,7 +68,6 @@ class CashMovements(models.Model):
 
     author = models.ForeignKey(
         User,
-        # related_name='entries',
         null=True,
         editable=False
         )
@@ -122,21 +121,21 @@ class PharmaceuticalInventoryMovements(models.Model):
 	OUT = 2
 	IN_OUT = (
 		(IN, 'LOAD'),
-		(OUT, 'DISCHARGE'),
+		(OUT, 'UNLOAD'),
 	)
 
 
 	author = models.ForeignKey(
 			User,
 			null=True,
-			editable=False
-			)
+			editable=False,
+	)
 
 	load_discharge = models.PositiveSmallIntegerField(choices=IN_OUT, null=True, verbose_name="Load / Discharge")
 	annulled = models.BooleanField(default=True, help_text='[Deselect for cancel entry]', verbose_name="Validation")
 	operation_date = models.DateField(verbose_name="Operation Date", default=timezone.now)
 	cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service")
-	customer = models.ForeignKey('settings.Customer', null=True, blank=True, editable=False, verbose_name="Service Customer")
+	customer = models.ForeignKey('settings.Customer', null=True, verbose_name="Service Customer")
 	# drug = models.ForeignKey('settings.Customer', verbose_name="Generic Drug")
 	drug = models.CharField(max_length=200, blank=True, verbose_name="Generic Drug")
 	quantity = models.IntegerField()
