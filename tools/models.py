@@ -120,6 +120,8 @@ class PharmaceuticalInventoryMovements(models.Model):
 
 	class Meta:
 		verbose_name_plural = "Pharmaceutical Inventory Movements"
+		verbose_name = "Pharma Inventory"
+
 	IN = 1
 	OUT = 2
 	IN_OUT = (

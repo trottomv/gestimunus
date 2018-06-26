@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.db import models
 from datetime import datetime
-from .models import Agenda
+from .models import Agenda #, CashMovementsCustomerDetails
 import ast
 import json
 from django.http import HttpResponse
@@ -34,3 +34,6 @@ def eventsFeed(request):
         json_list.append(json_entry)
 
     return HttpResponse(json.dumps(json_list), content_type='application/json')
+
+# def supplier(request):
+#     supplier = request.POST.get("id_supplier")

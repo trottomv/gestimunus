@@ -10,6 +10,12 @@ from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 
 # Register your models here.
 
+def set_recived(modeladmin, request, queryset):
+    for movements in queryset:
+        movements.recived = True
+        movements.save()
+set_recived.short_description = 'Set as Recived'
+
 class DiaryAdmin(admin.ModelAdmin):
     list_display = ('title', 'diaryType', 'customer', '_text', 'created_date', 'sign', 'upload')
     search_fields = ('diaryType', 'customer')
@@ -88,7 +94,7 @@ class CashMovementsAdmin(admin.ModelAdmin):
         current_user_profile = Profile.objects.filter(user_id=current_user.id)
         if db_field.name == "causal":
             if not request.user.is_superuser:
-                kwargs["queryset"] = MovementsCausal.objects.filter(admin=False)
+                kwargs["queryset)"] = MovementsCausal.objects.filter(admin=False)
 
         if db_field.name == "cashdesk":
             if not request.user.is_superuser:
@@ -104,6 +110,7 @@ class CashMovementsAdmin(admin.ModelAdmin):
     list_display = ('operation_date', 'annulled', 'supplier', 'amount', 'cashdesk', 'causal', 'note', 'protocol', 'recived', 'sign', 'author',)
     list_filter = (('causal', RelatedOnlyFieldListFilter), ('cashdesk', RelatedOnlyFieldListFilter))
     inlines = [CashMovementsAdminInline, ]
+    actions = [set_recived, ]
     # cashdesk_filter_related_only=True
 
 class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
@@ -112,6 +119,7 @@ class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
 
     list_display = ('prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
     list_filter = ('customer', ('operation_date', DateRangeFilter))
+    readonly_fields = ('prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
 
 class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
