@@ -38,7 +38,6 @@ class PlannerAdmin(admin.ModelAdmin):
 
 
 class CashMovementsAdminInline(admin.TabularInline):
-
     model = CashMovementsCustomerDetails
     can_delete = False
     verbose_name_plural = 'Customer Details'
@@ -108,7 +107,9 @@ class CashMovementsAdmin(admin.ModelAdmin):
     # cashdesk_filter_related_only=True
 
 class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
-    
+    def has_add_permission(self, request):
+        return False
+
     list_display = ('prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
     list_filter = ('customer', ('operation_date', DateRangeFilter))
 
