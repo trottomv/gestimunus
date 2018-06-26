@@ -14,7 +14,7 @@ def set_recived(modeladmin, request, queryset):
     for movements in queryset:
         movements.recived = True
         movements.save()
-set_recived.short_description = 'Set as Recived'
+set_recived.short_description = 'Set as "Recived"'
 
 class DiaryAdmin(admin.ModelAdmin):
     list_display = ('title', 'diaryType', 'customer', '_text', 'created_date', 'sign', 'upload')
@@ -108,7 +108,7 @@ class CashMovementsAdmin(admin.ModelAdmin):
 
 
     list_display = ('operation_date', 'annulled', 'supplier', 'amount', 'cashdesk', 'causal', 'note', 'protocol', 'recived', 'sign', 'author',)
-    list_filter = (('causal', RelatedOnlyFieldListFilter), ('cashdesk', RelatedOnlyFieldListFilter))
+    list_filter = (('causal', RelatedOnlyFieldListFilter), ('cashdesk', RelatedOnlyFieldListFilter), 'recived', )
     inlines = [CashMovementsAdminInline, ]
     actions = [set_recived, ]
     # cashdesk_filter_related_only=True
