@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Operator, Customer, DiariesType, CashDesk, MovementsCausal, Profile
+from .models import Operator, Customer, DiariesType, CashDesk, MovementsCausal, Profile, MovementsType
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
@@ -43,6 +43,7 @@ admin.site.register(Customer, CustomerAdmin)
 admin.site.register(DiariesType, DiariesTypeAdmin)
 admin.site.register(CashDesk, CashDeskAdmin)
 admin.site.register(MovementsCausal)
+admin.site.register(MovementsType)
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 admin.site.site_header = 'Gesti-Munus'
