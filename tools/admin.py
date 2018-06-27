@@ -111,12 +111,15 @@ class CashMovementsAdmin(admin.ModelAdmin):
     list_filter = (('causal', RelatedOnlyFieldListFilter), ('cashdesk', RelatedOnlyFieldListFilter), 'recived', )
     inlines = [CashMovementsAdminInline, ]
     actions = [set_recived, ]
+    # admin.site.disable_action('delete_selected')
     def get_actions(self, request):
-            actions = super(CashMovementsAdmin, self).get_actions(request)
-            if not request.user.is_superuser:
-                if 'set_recived' in actions:
-                    del actions['set_recived']
-            return actions
+        actions = super(CashMovementsAdmin, self).get_actions(request)
+        if not request.user.is_superuser:
+            if 'set_recived' in actions:
+                del actions['set_recived']
+            # if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
 
 class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
@@ -154,9 +157,14 @@ class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
 
         return super(PharmaceuticalInventoryMovementsAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
+
     list_display = ('operation_date', 'load_discharge', 'annulled', 'cashdesk', 'customer', 'drug', 'quantity', 'note', 'sign', 'author')
     list_filter = (('customer', RelatedOnlyFieldListFilter), ('cashdesk', RelatedOnlyFieldListFilter), ('operation_date', DateRangeFilter))
-
+    def get_actions(self, request):
+        actions = super(PharmaceuticalInventoryMovementsAdmin, self).get_actions(request)
+        if not request.user.is_superuser:
+            del actions['delete_selected']
+            return actions
 
 admin.site.register(Diary, DiaryAdmin)
 admin.site.register(Agenda, AgendaAdmin)
