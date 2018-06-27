@@ -70,6 +70,19 @@ class MovementsCausal(models.Model):
 	def __str__(self):
 		return u'%s' % (self.causal)
 
+class MovementsType(models.Model):
+	class Meta:
+		verbose_name_plural = _("Movements Types")
+
+	mv_type = models.CharField(max_length=200)
+
+	def publish(self):
+		self.published_date = timezone.now()
+		self.save()
+
+	def __str__(self):
+		return u'%s' % (self.mv_type)
+	
 class Operator(models.Model):
 	class Meta:
 		verbose_name_plural = _("Operators")
