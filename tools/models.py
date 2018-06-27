@@ -66,35 +66,36 @@ class Planner(Agenda):
 
 class CashMovements(models.Model):
 
-    class Meta:
-        verbose_name_plural = "Cash Movements"
+	class Meta:
+		verbose_name_plural = "Cash Movements"
 
-    author = models.ForeignKey(
-        User,
-        null=True,
-        editable=False
-        )
+	author = models.ForeignKey(
+		User,
+		null=True,
+		editable=False
+	)
 
-    annulled = models.BooleanField(default=True, help_text='[Deselect for cancel entry]', verbose_name="Validation")
-    recived = models.BooleanField(default=False, verbose_name="Recived")
-    operation_date = models.DateField(verbose_name="Operation Date", default=timezone.now)
-    document_date =  models.DateField(blank=True, null=True, verbose_name="Document Date")
-    cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service")
-    causal = models.ForeignKey('settings.MovementsCausal', verbose_name="Causal")
-    supplier = models.CharField(max_length=200, verbose_name="Supplier", null=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount")
-    customer = models.ForeignKey('settings.Customer', null=True, blank=True, editable=False, verbose_name="Service Customer")
-    note = models.CharField(max_length=200, blank=True, verbose_name="Note")
-    sign = models.ForeignKey('settings.Operator', on_delete=models.CASCADE, verbose_name="Sign")
-    protocol = models.IntegerField(unique=True, editable=False, default=protocolgen)
+	annulled = models.BooleanField(default=True, help_text='[Deselect for cancel entry]', verbose_name="Validation")
+	recived = models.BooleanField(default=False, verbose_name="Recived")
+	operation_date = models.DateField(verbose_name="Operation Date", default=timezone.now)
+	document_date =  models.DateField(blank=True, null=True, verbose_name="Document Date")
+	cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service")
+	causal = models.ForeignKey('settings.MovementsCausal', verbose_name="Causal")
+	mv_type = models.ForeignKey('settings.MovementsType', verbose_name="Type", null=True)
+	supplier = models.CharField(max_length=200, verbose_name="Supplier", null=True)
+	amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount")
+	customer = models.ForeignKey('settings.Customer', null=True, blank=True, editable=False, verbose_name="Service Customer")
+	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
+	sign = models.ForeignKey('settings.Operator', on_delete=models.CASCADE, verbose_name="Sign")
+	protocol = models.IntegerField(unique=True, editable=False, default=protocolgen)
 
-    def publish(self):
-        self.published_date = timezone.now()
-        self.save()
+	def publish(self):
+		self.published_date = timezone.now()
+		self.save()
 
-    def __str__(self):
-        # return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
-        return u'%s' % (self.protocol)
+	def __str__(self):
+		# return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
+		return u'%s' % (self.protocol)
 
 class CashMovementsCustomerDetails(models.Model):
 
