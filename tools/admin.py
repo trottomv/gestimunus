@@ -116,7 +116,7 @@ class CashMovementsAdmin(admin.ModelAdmin):
             if not request.user.is_superuser:
                 if 'set_recived' in actions:
                     del actions['set_recived']
-                return actions
+            return actions
 
 class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
