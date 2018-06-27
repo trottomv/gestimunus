@@ -81,7 +81,7 @@ class CashMovements(models.Model):
 	document_date =  models.DateField(blank=True, null=True, verbose_name="Document Date")
 	cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service")
 	causal = models.ForeignKey('settings.MovementsCausal', verbose_name="Causal")
-	mv_type = models.ForeignKey('settings.MovementsType', verbose_name="Type", null=True)
+	mv_type = models.ForeignKey('settings.MovementsType', verbose_name="Type", null=True, blank=True)
 	supplier = models.CharField(max_length=200, verbose_name="Supplier", null=True)
 	amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount")
 	customer = models.ForeignKey('settings.Customer', null=True, blank=True, editable=False, verbose_name="Service Customer")
