@@ -28,8 +28,8 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = True
 # DEBUG = False
 
-ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -155,7 +155,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_UPLOAD = 'uploads/' + datetime.now().strftime("%Y")+'/'+datetime.now().strftime("%m")+'/'+datetime.now().strftime("%d")+'/'
 MEDIA_ROOT = [ os.path.join(BASE_DIR, "uploads/") ]
 STATICFILES_DIRS = [

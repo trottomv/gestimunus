@@ -35,5 +35,11 @@ def eventsFeed(request):
 
     return HttpResponse(json.dumps(json_list), content_type='application/json')
 
-# def supplier(request):
-#     supplier = request.POST.get("id_supplier")
+def supplier(request):
+    if request.method == 'GET':
+        # do_something()
+        print request.POST.get("id_supplier")
+
+    elif request.method == 'POST':
+        # do_something_else()
+        print request.POST.get("id_supplier")

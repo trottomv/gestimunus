@@ -11,7 +11,7 @@ from settings.models import CashDesk, MovementsCausal, Customer, Profile
 # Create your models here.
 
 def protocolgen():
-	return 201803001 + CashMovements.objects.count()
+	return 201803001 + CashMovements.objects.count() + 1
 
 
 class Diary(models.Model):

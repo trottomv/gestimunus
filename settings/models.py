@@ -70,6 +70,7 @@ class MovementsCausal(models.Model):
 	def __str__(self):
 		return u'%s' % (self.causal)
 
+
 class Operator(models.Model):
 	class Meta:
 		verbose_name_plural = _("Operators")
@@ -78,6 +79,7 @@ class Operator(models.Model):
 	surname = models.CharField(max_length=200)
 	qualify = models.CharField(max_length=200)
 	created_date = models.DateTimeField(default=timezone.now)
+	services = models.ManyToManyField(CashDesk, blank=True)
 
 	def publish(self):
 		self.published_date = timezone.now()
