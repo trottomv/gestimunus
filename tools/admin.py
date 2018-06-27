@@ -138,7 +138,7 @@ class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if getattr(obj, 'author', None) is None:
             obj.author = request.user
-        # obj.save()
+        obj.save()
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         current_user = request.user
