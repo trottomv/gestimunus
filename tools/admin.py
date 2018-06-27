@@ -89,29 +89,34 @@ class CashMovementsAdmin(admin.ModelAdmin):
             self.exclude.append('recived') #here!
         return super(CashMovementsAdmin, self).get_form(request, obj, **kwargs)
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        current_user = request.user
-        current_user_profile = Profile.objects.filter(user_id=current_user.id)
-        if db_field.name == "causal":
-            if not request.user.is_superuser:
-                kwargs["queryset)"] = MovementsCausal.objects.filter(admin=False)
-
-        if db_field.name == "cashdesk":
-            if not request.user.is_superuser:
-                kwargs["queryset"] = CashDesk.objects.filter(
-                    id__in=Profile.cashdeskowner.through.objects.filter(
-                    profile_id=current_user_profile
-                    ).values('cashdesk_id')
-                )
-
-        return super(CashMovementsAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     current_user = request.user
+    #     current_user_profile = Profile.objects.filter(user_id=current_user.id)
+    #     if db_field.name == "causal":
+    #         if not request.user.is_superuser:
+    #             kwargs["queryset)"] = MovementsCausal.objects.filter(admin=False)
+    #
+    #     if db_field.name == "cashdesk":
+    #         if not request.user.is_superuser:
+    #             kwargs["queryset"] = CashDesk.objects.filter(
+    #                 id__in=Profile.cashdeskowner.through.objects.filter(
+    #                 profile_id=current_user_profile
+    #                 ).values('cashdesk_id')
+    #             )
+    #
+    #     return super(CashMovementsAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
     list_display = ('operation_date', 'annulled', 'supplier', 'amount', 'cashdesk', 'causal', 'note', 'protocol', 'recived', 'sign', 'author',)
     list_filter = (('causal', RelatedOnlyFieldListFilter), ('cashdesk', RelatedOnlyFieldListFilter), 'recived', )
     inlines = [CashMovementsAdminInline, ]
     actions = [set_recived, ]
-    # cashdesk_filter_related_only=True
+    def get_actions(self, request):
+            actions = super(CashMovementsAdmin, self).get_actions(request)
+            if not request.user.is_superuser:
+                if 'set_recived' in actions:
+                    del actions['set_recived']
+                return actions
 
 class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
