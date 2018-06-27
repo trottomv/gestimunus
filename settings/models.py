@@ -70,7 +70,6 @@ class MovementsCausal(models.Model):
 	def __str__(self):
 		return u'%s' % (self.causal)
 
-
 class Operator(models.Model):
 	class Meta:
 		verbose_name_plural = _("Operators")
