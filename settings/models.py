@@ -23,6 +23,8 @@ class CashDesk(models.Model):
 
 	cashdesk = models.CharField(max_length=200, verbose_name=_('Cash Desk'))
 	centercost = models.IntegerField(verbose_name=_('Center Cost'))
+	opening_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Opening Amount")
+
 	# owner = models.ManyToManyField(CashDesk, null=True)
 
 	def publish(self):
@@ -82,7 +84,7 @@ class MovementsType(models.Model):
 
 	def __str__(self):
 		return u'%s' % (self.mv_type)
-	
+
 class Operator(models.Model):
 	class Meta:
 		verbose_name_plural = _("Operators")
