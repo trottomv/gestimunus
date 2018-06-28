@@ -11,7 +11,15 @@ from settings.models import CashDesk, MovementsCausal, Customer, Profile
 # Create your models here.
 
 def protocolgen():
-	return 201803001 + CashMovements.objects.count() + 1
+	# return 201803001 + CashMovements.objects.count() + 1
+	qs = CashMovements.objects.latest('protocol')
+	if str(qs.protocol)[0:6] == timezone.now().strftime("%Y%m"):
+		protocol = int(timezone.now().strftime("%Y") + timezone.now().strftime("%m") + format(int(str(qs.protocol)[6:]) + 1, "04"))
+		return protocol
+	else:
+		protocol = int(timezone.now().strftime("%Y") + timezone.now().strftime("%m") + format(1, "04"))
+		return protocol
+
 
 
 class Diary(models.Model):
