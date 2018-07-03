@@ -27,11 +27,11 @@ class Diary(models.Model):
 		verbose_name_plural = _("Diaries")
 		verbose_name = _("Diary")
 
-	# author = models.ForeignKey(
-	# 	User,
-	# 	null=True,
-	# 	editable=False
-	# )
+	author = models.ForeignKey(
+		User,
+		null=True,
+		editable=False
+	)
 
 	diaryType = models.ForeignKey('settings.DiariesType', on_delete=models.CASCADE)
 	customer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)

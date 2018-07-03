@@ -17,7 +17,15 @@ def set_recived(modeladmin, request, queryset):
 set_recived.short_description = 'Set as "Recived"'
 
 class DiaryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'diaryType', 'customer', '_text', 'created_date', 'sign', 'upload')
+    def get_queryset(self, request):
+        if not request.user.is_superuser:
+            qs = super(DiaryAdmin, self).get_queryset(request)
+            return qs.filter(author=request.user)
+        else:
+            qs = super(DiaryAdmin, self).get_queryset(request)
+            return qs
+
+    list_display = ('title', 'diaryType', 'customer', '_text', 'created_date', 'sign', 'upload', 'author')
     search_fields = ('diaryType', 'customer')
     list_filter = ('diaryType', 'customer', 'sign', ('created_date', DateRangeFilter))
 
