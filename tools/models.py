@@ -27,6 +27,12 @@ class Diary(models.Model):
 		verbose_name_plural = _("Diaries")
 		verbose_name = _("Diary")
 
+	# author = models.ForeignKey(
+	# 	User,
+	# 	null=True,
+	# 	editable=False
+	# )
+
 	diaryType = models.ForeignKey('settings.DiariesType', on_delete=models.CASCADE)
 	customer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
 	title = models.CharField(max_length=200)
@@ -84,7 +90,7 @@ class CashMovements(models.Model):
 	)
 
 	annulled = models.BooleanField(default=True, help_text='[Deselect for cancel entry]', verbose_name="Validation")
-	recived = models.BooleanField(default=False, verbose_name="Recived")
+	recived = models.NullBooleanField(default=False, verbose_name="Recived")
 	operation_date = models.DateField(verbose_name="Operation Date", default=timezone.now)
 	document_date =  models.DateField(blank=True, null=True, verbose_name="Document Date")
 	cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service")
