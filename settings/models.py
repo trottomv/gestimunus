@@ -126,6 +126,8 @@ class Customer(models.Model):
 	surname = models.CharField(max_length=200)
 	birthday = models.DateField()
 	created_date = models.DateTimeField(default=timezone.now)
+	services = models.ManyToManyField(CashDesk, blank=True)
+
 
 	def publish(self):
 		self.published_date = timezone.now()
