@@ -36,9 +36,26 @@ class OperatorNewAdmin(admin.ModelAdmin):
     list_filter = ('surname', 'qualify',)
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('surname', 'name', 'birthday', 'created_date')
+
+    def get_queryset(self, request):
+        current_user = request.user
+        current_user_profile = Profile.objects.filter(user_id=current_user.id)
+        current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
+        if not request.user.is_superuser:
+            qs = super(CustomerAdmin, self).get_queryset(request)
+            return qs.filter(services__in=current_user_cashdesk)
+        else:
+            qs = super(CustomerAdmin, self).get_queryset(request)
+            return qs
+            # return qs.filter(services=2)
+
+
+    list_display = ('surname', 'name', 'get_services', 'birthday', 'created_date')
     search_fields = ('surname',)
     list_filter = ('surname',)
+
+    def get_services(self, obj):
+        return ", ".join([p.cashdesk for p in obj.services.all()])
 
 class DiariesTypeAdmin(admin.ModelAdmin):
     list_display = ('diarytype', 'created_date')
