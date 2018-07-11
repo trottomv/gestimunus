@@ -45,7 +45,7 @@ class DiaryAdmin(admin.ModelAdmin):
                     cashdesk_id__in=current_user_cashdesk
                     ).values('operatornew_id')
                 )
-                
+
         return super(DiaryAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -141,6 +141,7 @@ class CashMovementsAdmin(admin.ModelAdmin):
         current_user = request.user
         current_user_profile = Profile.objects.filter(user_id=current_user.id)
         current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
+
         if db_field.name == "causal":
             if not request.user.is_superuser:
                 kwargs["queryset"] = MovementsCausal.objects.filter(admin=False)
@@ -203,6 +204,8 @@ class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         current_user = request.user
         current_user_profile = Profile.objects.filter(user_id=current_user.id)
+        current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
+        
 
         if db_field.name == "cashdesk":
             if not request.user.is_superuser:
@@ -212,8 +215,23 @@ class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
                     ).values('cashdesk_id')
                 )
 
-        return super(PharmaceuticalInventoryMovementsAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        if db_field.name == "customer":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = Customer.objects.filter(
+                    id__in=Customer.services.through.objects.filter(
+                    cashdesk_id__in=current_user_cashdesk
+                    ).values('customer_id')
+                )
 
+        if db_field.name == "sign":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = OperatorNew.objects.filter(
+                    id__in=OperatorNew.services.through.objects.filter(
+                    cashdesk_id__in=current_user_cashdesk
+                    ).values('operatornew_id')
+                )
+
+        return super(PharmaceuticalInventoryMovementsAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     list_display = ('operation_date', 'load_discharge', 'annulled', 'cashdesk', 'customer', 'drug', 'quantity', 'note', 'sign', 'author')
     list_filter = (('customer', RelatedOnlyFieldListFilter), ('cashdesk', RelatedOnlyFieldListFilter), ('operation_date', DateRangeFilter))
