@@ -51,7 +51,7 @@ class CustomerAdmin(admin.ModelAdmin):
 
     list_display = ('surname', 'name', 'get_services', 'birthday', 'created_date')
     search_fields = ('surname',)
-    list_filter = ('surname',)
+    list_filter = ('surname', 'services', )
 
     def get_services(self, obj):
         return ", ".join([p.cashdesk for p in obj.services.all()])
