@@ -2,7 +2,7 @@ from django.contrib import admin
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from django.contrib.admin import DateFieldListFilter
 from .models import Diary, Agenda, Planner, CashMovements, CashMovementsCustomerDetails, PharmaceuticalInventoryMovements
-from settings.models import MovementsCausal, CashDesk, Profile
+from settings.models import MovementsCausal, CashDesk, Profile, Customer
 import ast
 from datetime import datetime
 import json
@@ -68,6 +68,21 @@ class CashMovementsAdminInline(admin.TabularInline):
             return 0
         return self.extra
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        current_user = request.user
+        current_user_profile = Profile.objects.filter(user_id=current_user.id)
+
+        if db_field.name == "customer":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = Customer.objects.filter(
+                    id__in=Profile.cashdeskowner.through.objects.filter(
+                    profile_id=current_user_profile
+                    ).values('cashdesk_id')
+                )
+
+        return super(CashMovementsAdminInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+
 class CashMovementsAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         if not request.user.is_superuser:
@@ -116,7 +131,7 @@ class CashMovementsAdmin(admin.ModelAdmin):
 
 
     list_display = ('operation_date', 'annulled', 'supplier', 'amount', 'cashdesk', 'causal', 'note', 'protocol', 'recived', 'sign', 'author',)
-    list_filter = (('causal', RelatedOnlyFieldListFilter), ('cashdesk', RelatedOnlyFieldListFilter), 'recived', )
+    list_filter = (('causal', RelatedOnlyFieldListFilter), ('cashdesk', RelatedOnlyFieldListFilter), 'recived', ('operation_date', DateRangeFilter))
     inlines = [CashMovementsAdminInline, ]
     actions = [set_recived, ]
     # admin.site.disable_action('delete_selected')
