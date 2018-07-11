@@ -39,7 +39,7 @@ class Diary(models.Model):
 	# text = models.TextField()
 	text = HTMLField('Content')
 	upload = models.FileField(upload_to=settings.STATIC_UPLOAD, null=True)
-	sign = models.ForeignKey('settings.Operator', on_delete=models.CASCADE)
+	sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE)
 	created_date = models.DateTimeField(default=timezone.now)
 
 	def publish(self):
@@ -100,7 +100,7 @@ class CashMovements(models.Model):
 	amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount")
 	customer = models.ForeignKey('settings.Customer', null=True, blank=True, editable=False, verbose_name="Service Customer")
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
-	sign = models.ForeignKey('settings.Operator', on_delete=models.CASCADE, verbose_name="Sign")
+	sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE, verbose_name="Sign")
 	protocol = models.IntegerField(unique=True, editable=False, default=protocolgen)
 
 	def publish(self):
@@ -160,7 +160,7 @@ class PharmaceuticalInventoryMovements(models.Model):
 	drug = models.CharField(max_length=200, blank=True, verbose_name="Generic Drug")
 	quantity = models.IntegerField()
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
-	sign = models.ForeignKey('settings.Operator', on_delete=models.CASCADE, verbose_name="Sign")
+	sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE, verbose_name="Sign")
 
 	def publish(self):
 		self.published_date = timezone.now()

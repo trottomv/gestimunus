@@ -2,7 +2,7 @@ from django.contrib import admin
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from django.contrib.admin import DateFieldListFilter
 from .models import Diary, Agenda, Planner, CashMovements, CashMovementsCustomerDetails, PharmaceuticalInventoryMovements
-from settings.models import MovementsCausal, CashDesk, Profile, Customer, Operator
+from settings.models import MovementsCausal, CashDesk, Profile, Customer, OperatorNew
 import ast
 from datetime import datetime
 import json
@@ -129,13 +129,13 @@ class CashMovementsAdmin(admin.ModelAdmin):
                     ).values('cashdesk_id')
                 )
 
-        # if db_field.name == "sign":
-        #     if not request.user.is_superuser:
-        #         kwargs["queryset"] = Operator.objects.filter(
-        #             id__in=Profile.cashdeskowner.through.objects.filter(
-        #             profile_id=current_user_profile
-        #             ).values('cashdesk_id')
-        #         )
+        if db_field.name == "sign":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = OperatorNew.objects.filter(
+                    id__in=OperatorNew.services.through.objects.filter(
+                    cashdesk_id__in=current_user_cashdesk
+                    ).values('operatornew_id')
+                )
 
         return super(CashMovementsAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 

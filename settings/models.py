@@ -87,7 +87,7 @@ class MovementsType(models.Model):
 
 class Operator(models.Model):
 	class Meta:
-		verbose_name_plural = _("Operators")
+		verbose_name_plural = _("Operators OLD")
 
 	name = models.CharField(primary_key=True, max_length=200)
 	surname = models.CharField(max_length=200)
@@ -102,6 +102,22 @@ class Operator(models.Model):
 	def __str__(self):
 		return u'%s %s' % (self.surname, self.name)
 
+class OperatorNew(models.Model):
+	class Meta:
+		verbose_name_plural = _("Operators")
+
+	name = models.CharField(max_length=200)
+	surname = models.CharField(max_length=200)
+	qualify = models.CharField(max_length=200)
+	created_date = models.DateTimeField(default=timezone.now)
+	services = models.ManyToManyField(CashDesk, blank=True)
+
+	def publish(self):
+		self.published_date = timezone.now()
+		self.save()
+
+	def __str__(self):
+		return u'%s %s' % (self.surname, self.name)
 
 class DiariesType(models.Model):
     # class Meta:

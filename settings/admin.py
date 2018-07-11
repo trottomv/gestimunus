@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Operator, Customer, DiariesType, CashDesk, MovementsCausal, Profile, MovementsType
+from .models import Operator, OperatorNew, Customer, DiariesType, CashDesk, MovementsCausal, Profile, MovementsType
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
@@ -30,6 +30,11 @@ class OperatorAdmin(admin.ModelAdmin):
     search_fields = ('name', 'surname')
     list_filter = ('surname', 'qualify',)
 
+class OperatorNewAdmin(admin.ModelAdmin):
+    list_display = ('surname', 'name', 'qualify', 'created_date')
+    search_fields = ('name', 'surname')
+    list_filter = ('surname', 'qualify',)
+
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('surname', 'name', 'birthday', 'created_date')
     search_fields = ('surname',)
@@ -38,7 +43,8 @@ class CustomerAdmin(admin.ModelAdmin):
 class DiariesTypeAdmin(admin.ModelAdmin):
     list_display = ('diarytype', 'created_date')
 
-admin.site.register(Operator, OperatorAdmin)
+# admin.site.register(Operator, OperatorAdmin)
+admin.site.register(OperatorNew, OperatorNewAdmin)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(DiariesType, DiariesTypeAdmin)
 admin.site.register(CashDesk, CashDeskAdmin)
