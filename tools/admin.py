@@ -7,8 +7,6 @@ import ast
 from datetime import datetime
 import json
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
-from operator import and_
-from django.db.models import Q
 
 # Register your models here.
 
