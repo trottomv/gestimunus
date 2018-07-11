@@ -47,7 +47,6 @@ class CustomerAdmin(admin.ModelAdmin):
         else:
             qs = super(CustomerAdmin, self).get_queryset(request)
             return qs
-            # return qs.filter(services=2)
 
 
     list_display = ('surname', 'name', 'get_services', 'birthday', 'created_date')
