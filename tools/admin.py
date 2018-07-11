@@ -25,6 +25,30 @@ class DiaryAdmin(admin.ModelAdmin):
             qs = super(DiaryAdmin, self).get_queryset(request)
             return qs
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        current_user = request.user
+        current_user_profile = Profile.objects.filter(user_id=current_user.id)
+        current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
+
+        if db_field.name == "customer":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = Customer.objects.filter(
+                    id__in=Customer.services.through.objects.filter(
+                    cashdesk_id__in=current_user_cashdesk
+                    ).values('customer_id')
+                )
+
+        if db_field.name == "sign":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = OperatorNew.objects.filter(
+                    id__in=OperatorNew.services.through.objects.filter(
+                    cashdesk_id__in=current_user_cashdesk
+                    ).values('operatornew_id')
+                )
+                
+        return super(DiaryAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+
     list_display = ('title', 'diaryType', 'customer', '_text', 'created_date', 'sign', 'upload', 'author')
     search_fields = ('diaryType', 'customer')
     list_filter = ('diaryType', 'customer', 'sign', ('created_date', DateRangeFilter))
