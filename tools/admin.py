@@ -2,11 +2,13 @@ from django.contrib import admin
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from django.contrib.admin import DateFieldListFilter
 from .models import Diary, Agenda, Planner, CashMovements, CashMovementsCustomerDetails, PharmaceuticalInventoryMovements
-from settings.models import MovementsCausal, CashDesk, Profile, Customer
+from settings.models import MovementsCausal, CashDesk, Profile, Customer, Operator
 import ast
 from datetime import datetime
 import json
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
+from operator import and_
+from django.db.models import Q
 
 # Register your models here.
 
@@ -71,13 +73,14 @@ class CashMovementsAdminInline(admin.TabularInline):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         current_user = request.user
         current_user_profile = Profile.objects.filter(user_id=current_user.id)
+        current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
 
         if db_field.name == "customer":
             if not request.user.is_superuser:
                 kwargs["queryset"] = Customer.objects.filter(
-                    id__in=Profile.cashdeskowner.through.objects.filter(
-                    profile_id=current_user_profile
-                    ).values('cashdesk_id')
+                    id__in=Customer.services.through.objects.filter(
+                    cashdesk_id__in=current_user_cashdesk
+                    ).values('customer_id')
                 )
 
         return super(CashMovementsAdminInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
@@ -115,6 +118,7 @@ class CashMovementsAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         current_user = request.user
         current_user_profile = Profile.objects.filter(user_id=current_user.id)
+        current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
         if db_field.name == "causal":
             if not request.user.is_superuser:
                 kwargs["queryset"] = MovementsCausal.objects.filter(admin=False)
@@ -126,6 +130,14 @@ class CashMovementsAdmin(admin.ModelAdmin):
                     profile_id=current_user_profile
                     ).values('cashdesk_id')
                 )
+
+        # if db_field.name == "sign":
+        #     if not request.user.is_superuser:
+        #         kwargs["queryset"] = Operator.objects.filter(
+        #             id__in=Profile.cashdeskowner.through.objects.filter(
+        #             profile_id=current_user_profile
+        #             ).values('cashdesk_id')
+        #         )
 
         return super(CashMovementsAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
