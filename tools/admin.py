@@ -25,6 +25,11 @@ class DiaryAdmin(admin.ModelAdmin):
             qs = super(DiaryAdmin, self).get_queryset(request)
             return qs
 
+    def save_model(self, request, obj, form, change):
+        if getattr(obj, 'author', None) is None:
+            obj.author = request.user
+        obj.save()
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         current_user = request.user
         current_user_profile = Profile.objects.filter(user_id=current_user.id)
@@ -205,7 +210,6 @@ class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
         current_user = request.user
         current_user_profile = Profile.objects.filter(user_id=current_user.id)
         current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
-        
 
         if db_field.name == "cashdesk":
             if not request.user.is_superuser:
