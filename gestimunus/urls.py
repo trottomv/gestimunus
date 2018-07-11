@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^eventjson/', views.eventsFeed),
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^jsi18n/$', JavaScriptCatalog.as_view(), js_info_dict),
+    # url(r'^chaining/', include('smart_selects.urls')),
     # url(r'^uploads/', views.(...)),
     # url(r'^adminlte/', include('adminlte.urls')),
     # url(r'^static/(?P<path>.*)$', 'django.views.static.serve', include({"document_root": settings.STATIC_ROOT})),
