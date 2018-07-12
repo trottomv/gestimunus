@@ -22,7 +22,6 @@ def protocolgen():
 		return protocol
 
 
-
 class Diary(models.Model):
 	class Meta:
 		verbose_name_plural = _("Diaries")
