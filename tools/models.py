@@ -7,7 +7,7 @@ from tinymce import HTMLField
 from gestimunus import settings
 from recurrence.fields import RecurrenceField
 from settings.models import CashDesk, MovementsCausal, Customer, Profile
-# from smart_selects.db_fields import ChainedManyToManyField, ChainedForeignKey
+from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
 
 # Create your models here.
 
@@ -155,19 +155,25 @@ class PharmaceuticalInventoryMovements(models.Model):
 	annulled = models.BooleanField(default=True, help_text='[Deselect for cancel entry]', verbose_name="Validation")
 	operation_date = models.DateField(verbose_name="Operation Date", default=timezone.now)
 	cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service")
-	# customer = ChainedForeignKey(
-    #     Customer,
-	# 	verbose_name='Customer',
-	# 	chained_field="cashdesk",
-    #     chained_model_field="cashdesk")
-	# 	# auto_choose = True,)
-	# 	# show_all = True )
-	customer = models.ForeignKey('settings.Customer', null=True, verbose_name="Customer")
+	customer = ChainedForeignKey(
+        'settings.Customer',
+		verbose_name='Customer',
+		chained_field="cashdesk",
+        chained_model_field="services",
+		auto_choose = True,
+		show_all = False,
+		null = True)
+	# customer = models.ForeignKey('settings.Customer', null=True, verbose_name="Customer")
 	# drug = models.ForeignKey('settings.Customer', verbose_name="Generic Drug")
 	drug = models.CharField(max_length=200, blank=True, verbose_name="Generic Drug")
 	quantity = models.IntegerField()
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
-	sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE, verbose_name="Sign")
+	# sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE, verbose_name="Sign")
+	sign = ChainedForeignKey(
+		'settings.OperatorNew',
+		 verbose_name="Sign",
+		 chained_field='cashdesk',
+		 chained_model_field='services')
 
 	def publish(self):
 		self.published_date = timezone.now()

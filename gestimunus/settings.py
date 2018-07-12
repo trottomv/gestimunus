@@ -32,6 +32,11 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
+# Smart Select settings
+
+USE_DJANGO_JQUERY = True
+JQUERY_URL = False
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -51,7 +56,7 @@ INSTALLED_APPS = [
     'tools',
     'tinymce',
     'recurrence',
-    # 'smart_selects',
+    'smart_selects',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -162,9 +167,6 @@ MEDIA_ROOT = [ os.path.join(BASE_DIR, "uploads/") ]
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "gestimunus/static/"),
 ]
-
-# JQUERY_URL = True
-# USE_DJANGO_JQUERY = True
 
 ## LOG CONFIG
 # import logging.config

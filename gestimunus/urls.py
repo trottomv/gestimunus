@@ -33,14 +33,14 @@ urlpatterns = [
     url(r'^eventjson/', views.eventsFeed),
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^jsi18n/$', JavaScriptCatalog.as_view(), js_info_dict),
-    # url(r'^chaining/', include('smart_selects.urls')),
+    url(r'^chaining/', include('smart_selects.urls')),
     # url(r'^uploads/', views.(...)),
     # url(r'^adminlte/', include('adminlte.urls')),
     # url(r'^static/(?P<path>.*)$', 'django.views.static.serve', include({"document_root": settings.STATIC_ROOT})),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG==False:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
