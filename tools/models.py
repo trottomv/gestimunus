@@ -33,13 +33,28 @@ class Diary(models.Model):
 		editable=False
 	)
 
+	services = models.ForeignKey('settings.CashDesk', on_delete=models.CASCADE)
 	diaryType = models.ForeignKey('settings.DiariesType', on_delete=models.CASCADE)
-	customer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
+	# customer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
+	customer = ChainedForeignKey(
+        'settings.Customer',
+		verbose_name='Customer',
+		chained_field="services",
+        chained_model_field="services",
+		auto_choose = True,
+		show_all = False,
+		null = True)
 	title = models.CharField(max_length=200)
 	# text = models.TextField()
 	text = HTMLField('Content')
 	upload = models.FileField(upload_to=settings.STATIC_UPLOAD, null=True, blank=True)
-	sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE)
+	# sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE)
+	sign = ChainedForeignKey(
+		'settings.OperatorNew',
+		 verbose_name="Sign",
+		 chained_field='services',
+		 chained_model_field='services')
+
 	created_date = models.DateTimeField(default=timezone.now)
 
 	def publish(self):

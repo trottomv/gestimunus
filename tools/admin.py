@@ -37,6 +37,14 @@ class DiaryAdmin(admin.ModelAdmin):
         current_user_profile = Profile.objects.filter(user_id=current_user.id)
         current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
 
+        if db_field.name == "services":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = CashDesk.objects.filter(
+                    id__in=Profile.cashdeskowner.through.objects.filter(
+                    profile_id=current_user_profile
+                    ).values('cashdesk_id')
+                )
+
         if db_field.name == "customer":
             if not request.user.is_superuser:
                 kwargs["queryset"] = Customer.objects.filter(
