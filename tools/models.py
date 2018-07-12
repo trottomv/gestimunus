@@ -90,6 +90,7 @@ class CashMovements(models.Model):
 		editable=False
 	)
 
+	protocol = models.IntegerField(unique=True, editable=False, default=protocolgen)
 	annulled = models.BooleanField(default=True, help_text='[Deselect for cancel entry]', verbose_name="Validation")
 	recived = models.NullBooleanField(default=False, verbose_name="Recived")
 	operation_date = models.DateField(verbose_name="Operation Date", default=timezone.now)
@@ -101,8 +102,13 @@ class CashMovements(models.Model):
 	amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount")
 	customer = models.ForeignKey('settings.Customer', null=True, blank=True, editable=False, verbose_name="Service Customer")
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
-	sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE, verbose_name="Sign")
-	protocol = models.IntegerField(unique=True, editable=False, default=protocolgen)
+	# sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE, verbose_name="Sign")
+	sign = ChainedForeignKey(
+		'settings.OperatorNew',
+		 verbose_name="Sign",
+		 chained_field='cashdesk',
+		 chained_model_field='services')
+
 
 	def publish(self):
 		self.published_date = timezone.now()
@@ -112,14 +118,27 @@ class CashMovements(models.Model):
 		# return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
 		return u'%s' % (self.protocol)
 
+	# def __cashdesk(self):
+	# 	# return u'%s' % (self.cashdesk)
+	# 	return self.cashdesk
+
 class CashMovementsCustomerDetails(models.Model):
 
 	class Meta:
 		verbose_name_plural = "Cash Movements Customer Details"
 
 	prot = models.ForeignKey('CashMovements')
+	# cashdesk = models.ForeignKey('CashMovements.cashdesk')
 	operation_date = models.DateField(default=timezone.now, editable=False) # models.DateField(verbose_name="Operation Date")
 	customer = models.ForeignKey('settings.Customer', null=True, blank=True, verbose_name="Service Customer")
+	# customer = ChainedForeignKey(
+    #     'settings.Customer',
+	# 	verbose_name='Service Customer',
+	# 	chained_field="cashdesk",
+    #     chained_model_field="services",
+	# 	auto_choose = True,
+	# 	show_all = False,
+	# 	null = True)
 	supplier = models.CharField(max_length=200, verbose_name="Supplier", null=True)
 	amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount", blank=True)
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")

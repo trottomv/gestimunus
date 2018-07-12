@@ -7,6 +7,8 @@ import ast
 from datetime import datetime
 import json
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
+from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
+
 
 # Register your models here.
 
