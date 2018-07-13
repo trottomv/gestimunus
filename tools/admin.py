@@ -94,7 +94,7 @@ class CashMovementsAdminInline(admin.TabularInline):
     model = CashMovementsCustomerDetails
     can_delete = False
     verbose_name_plural = 'Customer Details'
-    extra = 1
+    extra = 0
     class Media:
         js = (
             'js/clonesupplier.js',
