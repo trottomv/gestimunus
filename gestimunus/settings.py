@@ -67,6 +67,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'request_logging.middleware.LoggingMiddleware',
 ]
 
 ROOT_URLCONF = 'gestimunus.urls'
@@ -174,61 +175,78 @@ STATICFILES_DIRS = [
 # from django.utils.log import DEFAULT_LOGGING
 
 # Disable Django's logging setup
-LOGGING_CONFIG = None
+# LOGGING_CONFIG = None
+#
+# LOGGING = {
+#     'version': 1,
+#     'formatters': {
+#         'verbose': {
+#             'format': '[%(asctime)s] %(levelname)s [%(pathname)s:%(lineno)s] %(message)s',
+#             'datefmt' : "%d/%b/%Y %H:%M:%S"
+#         },
+#         'standard': {
+#             'format' : "[%(asctime)s] %(levelname)s %(message)s",
+#             'datefmt' : "%d/%b/%Y %H:%M:%S"
+#         },
+#     },
+#     'handlers': {
+#         'null': {
+#             'level':'DEBUG',
+#             'class':'logging.NullHandler',
+#         },
+#         'logfile': {
+#             'level':'INFO',
+#             'class':'logging.handlers.RotatingFileHandler',
+#             'filename': "gestimunus/static/logs/gestimunus.log",
+#             'maxBytes': 50000,
+#             'backupCount': 2,
+#             'formatter': 'verbose',
+#         },
+#         'console':{
+#             'level':'INFO',
+#             'class':'logging.StreamHandler',
+#             'formatter': 'standard'
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers':['console'],
+#             'propagate': True,
+#             'level':'WARN',
+#         },
+#         # 'django.request': {
+#         #     'handlers':['console'],
+#         #     'propagate': True,
+#         #     'level':'WARN',
+#         # },
+#         'django.db.backends': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#             'propagate': False,
+#         },
+#         'textlogger': {
+#             'handlers': ['console', 'logfile'],
+#             'level': 'INFO',
+#         },
+#     }
+# }
+#
+# import logging.config
+# logging.config.dictConfig(LOGGING)
 
 LOGGING = {
     'version': 1,
-    'formatters': {
-        'verbose': {
-            'format': '[%(asctime)s] %(levelname)s [%(pathname)s:%(lineno)s] %(message)s',
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
-        },
-        'standard': {
-            'format' : "[%(asctime)s] %(levelname)s %(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
-        },
-    },
+    'disable_existing_loggers': False,
     'handlers': {
-        'null': {
-            'level':'DEBUG',
-            'class':'logging.NullHandler',
-        },
-        'logfile': {
-            'level':'INFO',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename': "gestimunus/static/logs/gestimunus.log",
-            'maxBytes': 50000,
-            'backupCount': 2,
-            'formatter': 'verbose',
-        },
-        'console':{
-            'level':'INFO',
-            'class':'logging.StreamHandler',
-            'formatter': 'standard'
+        'console': {
+            'class': 'logging.StreamHandler',
         },
     },
     'loggers': {
-        'django': {
-            'handlers':['console'],
-            'propagate': True,
-            'level':'WARN',
-        },
-        # 'django.request': {
-        #     'handlers':['console'],
-        #     'propagate': True,
-        #     'level':'WARN',
-        # },
-        'django.db.backends': {
+        'django.request': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'DEBUG',  # change debug level as appropiate
             'propagate': False,
         },
-        'textlogger': {
-            'handlers': ['console', 'logfile'],
-            'level': 'INFO',
-        },
-    }
+    },
 }
-
-import logging.config
-logging.config.dictConfig(LOGGING)
