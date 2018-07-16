@@ -147,6 +147,8 @@ class CashMovementsAdminInline(admin.TabularInline):
 
         return super(CashMovementsAdminInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
+    # readonly_fields = ('supplier',)
+
 
 class CashMovementsAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
@@ -175,6 +177,7 @@ class CashMovementsAdmin(admin.ModelAdmin):
         self.exclude = []
         if not request.user.is_superuser:
             self.exclude.append('recived') #here!
+
         return super(CashMovementsAdmin, self).get_form(request, obj, **kwargs)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -218,6 +221,20 @@ class CashMovementsAdmin(admin.ModelAdmin):
             # if 'delete_selected' in actions:
             del actions['delete_selected']
         return actions
+
+    def get_readonly_fields(self, request, obj=None):
+        if request.user.is_superuser:
+            pass
+        else:
+            if obj.recived == True:
+                return self.readonly_fields + ('recived', 'annulled', 'operation_date', 'document_date', 'cashdesk', 'causal', 'mv_type', 'supplier', 'amount', 'note', 'sign')
+        return self.readonly_fields
+
+    def get_inline_instances(self, request, obj=None):
+        #Return no inlines when obj is being created
+        if obj.recived == True:
+            return []
+
 
 class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):

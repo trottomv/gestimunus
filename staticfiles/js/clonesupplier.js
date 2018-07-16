@@ -13,17 +13,5 @@
 //
 $(".#id_supplier").change(function(){
   var $this = $(this), $clone = $this.clone();
-  $this.after($clone).appendTo("td.field-supplier input");
+  $this.appendTo("td.field-supplier input");
 })(django.JQuery);
-
-// $(document).ready(function(){
-//   console.log('ciao');
-// });
-
-// $(".#id_cashdesk").change(function() {
-//   console.log($(this).val());
-// });
-//
-// $('select #id_cashdesk').on('change', function() {
-//   console.log( this.value );
-// })
