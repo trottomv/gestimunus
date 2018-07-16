@@ -136,6 +136,15 @@ class CashMovementsAdminInline(admin.TabularInline):
                     ).values('customer_id')
                 )
 
+        if db_field.name == "cashdesk":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = CashDesk.objects.filter(
+                    id__in=Profile.cashdeskowner.through.objects.filter(
+                    profile_id=current_user_profile
+                    ).values('cashdesk_id')
+                )
+
+
         return super(CashMovementsAdminInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -216,7 +225,7 @@ class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
 
     list_display = ('show_prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
     list_filter = ('customer', ('operation_date', DateRangeFilter))
-    readonly_fields = ('prot', 'operation_date', 'cashdesk', 'customer', 'supplier', 'amount', 'note')
+    readonly_fields = ('prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
 
     def show_prot(self, obj):
         return '<a href="/tools/cashmovements/%s">%s</a>' % (obj.prot_id, obj.prot)

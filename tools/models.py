@@ -152,7 +152,6 @@ class CashMovementsCustomerDetails(models.Model):
 
 	prot = models.ForeignKey('CashMovements')
 	cashdesk = models.ForeignKey('settings.CashDesk', null=True)
-	# cashdesk = models.ForeignKey('CashMovements._cashdesk')
 	operation_date = models.DateField(default=timezone.now, editable=False) # models.DateField(verbose_name="Operation Date")
 	# customer = models.ForeignKey('settings.Customer', null=True, blank=True, verbose_name="Service Customer")
 	customer = ChainedForeignKey(
