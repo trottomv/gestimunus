@@ -110,6 +110,7 @@ class CashMovementsAdminInline(admin.TabularInline):
     model = CashMovementsCustomerDetails
     can_delete = False
     verbose_name_plural = 'Customer Details'
+    # readonly_fields = ('supplier',)
     extra = 0
     class Media:
         js = (
@@ -147,14 +148,16 @@ class CashMovementsAdminInline(admin.TabularInline):
 
         return super(CashMovementsAdminInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    # readonly_fields = ('supplier',)
 
 
 class CashMovementsAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
+        current_user = request.user
+        current_user_profile = Profile.objects.filter(user_id=current_user.id)
+        current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
         if not request.user.is_superuser:
             qs = super(CashMovementsAdmin, self).get_queryset(request)
-            return qs.filter(author=request.user)
+            return qs.filter(cashdesk__in=current_user_cashdesk)
         else:
             qs = super(CashMovementsAdmin, self).get_queryset(request)
             return qs
@@ -228,12 +231,20 @@ class CashMovementsAdmin(admin.ModelAdmin):
         else:
             if obj.recived == True:
                 return self.readonly_fields + ('recived', 'annulled', 'operation_date', 'document_date', 'cashdesk', 'causal', 'mv_type', 'supplier', 'amount', 'note', 'sign')
+
         return self.readonly_fields
 
-    def get_inline_instances(self, request, obj=None):
-        #Return no inlines when obj is being created
-        if obj.recived == True:
-            return []
+    # def get_inline_instances(self, request, obj=None):
+    #     # if request.user.is_superuser:
+    #     #     pass
+    #     # else:
+    #         #Return no inlines when obj is being created
+    #     if obj.recived == 't':
+    #         return []
+    #     else:
+    #         pass
+    #
+    #     # return self.inlines
 
 
 class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
