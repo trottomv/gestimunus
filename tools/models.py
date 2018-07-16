@@ -33,8 +33,8 @@ class Diary(models.Model):
 		editable=False
 	)
 
-	services = models.ForeignKey('settings.CashDesk', on_delete=models.CASCADE, null=True)
-	diaryType = models.ForeignKey('settings.DiariesType', on_delete=models.CASCADE)
+	diaryType = models.ForeignKey('settings.DiariesType', on_delete=models.CASCADE, verbose_name="Diary Type")
+	services = models.ForeignKey('settings.CashDesk', on_delete=models.CASCADE, null=True, verbose_name="Service")
 	# customer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
 	customer = ChainedForeignKey(
         'settings.Customer',
@@ -43,10 +43,11 @@ class Diary(models.Model):
         chained_model_field="services",
 		auto_choose = True,
 		show_all = False,
-		null = True)
+		null = True,
+		blank= True)
 	title = models.CharField(max_length=200)
 	# text = models.TextField()
-	text = HTMLField('Content')
+	text = HTMLField('Content', blank=True)
 	upload = models.FileField(upload_to=settings.STATIC_UPLOAD, null=True, blank=True)
 	# sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE)
 	sign = ChainedForeignKey(
@@ -113,7 +114,7 @@ class CashMovements(models.Model):
 	causal = models.ForeignKey('settings.MovementsCausal', verbose_name="Causal")
 	mv_type = models.ForeignKey('settings.MovementsType', verbose_name="Type", null=True, blank=True)
 	supplier = models.CharField(max_length=200, verbose_name="Supplier", null=True)
-	amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount")
+	amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount", help_text='(Use "." as decimal separator)')
 	customer = models.ForeignKey('settings.Customer', null=True, blank=True, editable=False, verbose_name="Service Customer")
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
 	# sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE, verbose_name="Sign")
@@ -132,27 +133,34 @@ class CashMovements(models.Model):
 		# return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
 		return u'%s' % (self.protocol)
 
-	# def __cashdesk(self):
-	# 	# return u'%s' % (self.cashdesk)
-	# 	return self.cashdesk
+	@property
+	def _cashdesk(self):
+		return u'%s' % (self.cashdesk)
+		# return self.cashdesk
+
+	@_cashdesk.setter
+	def _cashdesk(self, value):
+		self._cashdesk = value
 
 class CashMovementsCustomerDetails(models.Model):
 
 	class Meta:
 		verbose_name_plural = "Cash Movements Customer Details"
 
+	# class ReadonlyMeta:
+	# 	readonly = ["cashdesk"]
+
 	prot = models.ForeignKey('CashMovements')
-	# cashdesk = models.ForeignKey('CashMovements.cashdesk')
+	cashdesk = models.ForeignKey('settings.CashDesk', null=True)
+	# cashdesk = models.ForeignKey('CashMovements._cashdesk')
 	operation_date = models.DateField(default=timezone.now, editable=False) # models.DateField(verbose_name="Operation Date")
-	customer = models.ForeignKey('settings.Customer', null=True, blank=True, verbose_name="Service Customer")
-	# customer = ChainedForeignKey(
-    #     'settings.Customer',
-	# 	verbose_name='Service Customer',
-	# 	chained_field="cashdesk",
-    #     chained_model_field="services",
-	# 	auto_choose = True,
-	# 	show_all = False,
-	# 	null = True)
+	# customer = models.ForeignKey('settings.Customer', null=True, blank=True, verbose_name="Service Customer")
+	customer = ChainedForeignKey(
+        'settings.Customer',
+		verbose_name='Service Customer',
+		chained_field='cashdesk',
+        chained_model_field='services',
+		null=True)
 	supplier = models.CharField(max_length=200, verbose_name="Supplier", null=True)
 	amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount", blank=True)
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")

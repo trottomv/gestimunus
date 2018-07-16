@@ -10,8 +10,20 @@
 //     // document.getElementById('id_cashmovementscustomerdetails_set-0-supplier').value=supplier;
 //   });
 //     // document.getElementByTagName('td .field-supplier input')[0].value=supplier;
-
+//
 $(".#id_supplier").change(function(){
   var $this = $(this), $clone = $this.clone();
   $this.after($clone).appendTo("td.field-supplier input");
-});
+})(django.JQuery);
+
+// $(document).ready(function(){
+//   console.log('ciao');
+// });
+
+// $(".#id_cashdesk").change(function() {
+//   console.log($(this).val());
+// });
+//
+// $('select #id_cashdesk').on('change', function() {
+//   console.log( this.value );
+// })

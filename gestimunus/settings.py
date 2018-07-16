@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     # 'adminlte.apps.AdminlteConfig',
     # 'admin_interface',
     # 'colorfield',
-    'flat_responsive',
+    # 'flat_responsive',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'tinymce',
     'recurrence',
     'smart_selects',
+    'django_readonly_field',
 ]
 
 MIDDLEWARE_CLASSES = [

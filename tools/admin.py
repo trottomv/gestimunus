@@ -196,11 +196,11 @@ class CashMovementsAdmin(admin.ModelAdmin):
 
 class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
-        return False
+        return True
 
     list_display = ('prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
     list_filter = ('customer', ('operation_date', DateRangeFilter))
-    readonly_fields = ('prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
+    readonly_fields = ('prot', 'operation_date', 'cashdesk', 'customer', 'supplier', 'amount', 'note')
 
 class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
