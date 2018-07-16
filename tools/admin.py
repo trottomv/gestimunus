@@ -212,17 +212,28 @@ class CashMovementsAdmin(admin.ModelAdmin):
 
 class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
-        return True
+        return False
 
-    list_display = ('prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
+    list_display = ('show_prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
     list_filter = ('customer', ('operation_date', DateRangeFilter))
     readonly_fields = ('prot', 'operation_date', 'cashdesk', 'customer', 'supplier', 'amount', 'note')
 
+    def show_prot(self, obj):
+        return '<a href="/tools/cashmovements/%s">%s</a>' % (obj.prot_id, obj.prot)
+    show_prot.allow_tags = True
+
 class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
+
     def get_queryset(self, request):
+        current_user = request.user
+        current_user_profile = Profile.objects.filter(user_id=current_user.id)
+        current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values_list('cashdesk_id'))
+
         if not request.user.is_superuser:
             qs = super(PharmaceuticalInventoryMovementsAdmin, self).get_queryset(request)
-            return qs.filter(author=request.user)
+            # for cd in current_user_cashdesk:
+                # return qs.filter(cashdesk=cd)
+            return qs.filter(cashdesk__in=current_user_cashdesk)
         else:
             qs = super(PharmaceuticalInventoryMovementsAdmin, self).get_queryset(request)
             return qs
