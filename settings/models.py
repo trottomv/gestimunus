@@ -61,8 +61,16 @@ class MovementsCausal(models.Model):
 	class Meta:
 		verbose_name_plural = _("Movements Causals")
 
+	IN = 1
+	OUT = 2
+	IN_OUT = (
+		(IN, 'IN'),
+		(OUT, 'OUT'),
+	)
+
 	causal = models.CharField(max_length=200)
 	admin = models.BooleanField(default=False, help_text='[Select for assign only to admins]', verbose_name="Admin Only", blank=True)
+	in_out = models.PositiveSmallIntegerField(choices=IN_OUT, null=True, verbose_name="In / Out")
 
 	def publish(self):
 		self.published_date = timezone.now()
