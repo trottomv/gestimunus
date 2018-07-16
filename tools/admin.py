@@ -110,7 +110,6 @@ class CashMovementsAdminInline(admin.TabularInline):
     model = CashMovementsCustomerDetails
     can_delete = False
     verbose_name_plural = 'Customer Details'
-    # readonly_fields = ('supplier',)
     extra = 0
     class Media:
         js = (
@@ -148,6 +147,16 @@ class CashMovementsAdminInline(admin.TabularInline):
 
         return super(CashMovementsAdminInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
+    def get_readonly_fields(self, request, obj=None):
+        cmqs = CashMovements.objects.filter(protocol=obj.protocol)[0].recived
+
+        if request.user.is_superuser:
+            pass
+        else:
+            if cmqs == True:
+                return self.readonly_fields + ('cashdesk', 'customer', 'supplier', 'amount', 'note')
+
+        return self.readonly_fields
 
 
 class CashMovementsAdmin(admin.ModelAdmin):
@@ -210,7 +219,6 @@ class CashMovementsAdmin(admin.ModelAdmin):
 
         return super(CashMovementsAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-
     list_display = ('operation_date', 'annulled', 'supplier', 'amount', 'cashdesk', 'causal', 'note', 'protocol', 'recived', 'sign', 'author',)
     list_filter = (('causal', RelatedOnlyFieldListFilter), ('cashdesk', RelatedOnlyFieldListFilter), 'recived', ('operation_date', DateRangeFilter))
     inlines = [CashMovementsAdminInline, ]
@@ -234,18 +242,6 @@ class CashMovementsAdmin(admin.ModelAdmin):
 
         return self.readonly_fields
 
-    # def get_inline_instances(self, request, obj=None):
-    #     # if request.user.is_superuser:
-    #     #     pass
-    #     # else:
-    #         #Return no inlines when obj is being created
-    #     if obj.recived == 't':
-    #         return []
-    #     else:
-    #         pass
-    #
-    #     # return self.inlines
-
 
 class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
@@ -258,6 +254,8 @@ class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
     def show_prot(self, obj):
         return '<a href="/tools/cashmovements/%s">%s</a>' % (obj.prot_id, obj.prot)
     show_prot.allow_tags = True
+
+
 
 class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
 
