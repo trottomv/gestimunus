@@ -73,6 +73,22 @@ class DiaryAdmin(admin.ModelAdmin):
     _text.allow_tags = True
 
 class AgendaAdmin(admin.ModelAdmin):
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        current_user = request.user
+        current_user_profile = Profile.objects.filter(user_id=current_user.id)
+        current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
+
+        if db_field.name == "eventCustomer":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = Customer.objects.filter(
+                    id__in=Customer.services.through.objects.filter(
+                    cashdesk_id__in=current_user_cashdesk
+                    ).values('customer_id')
+                )
+
+        return super(AgendaAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
     list_display = ('eventTitle', 'eventCustomer', 'eventDescription', 'eventStart', 'eventEnd',)
     search_fields = ('eventTitle', 'eventCustomer', 'eventDescription')
     list_filter = ('eventTitle', 'eventCustomer', ('eventStart', DateTimeRangeFilter))

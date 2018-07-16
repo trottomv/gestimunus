@@ -72,11 +72,11 @@ class Agenda(models.Model):
 		verbose_name_plural = _("Events")
 		verbose_name = _("Event")
 
-	eventTitle = models.CharField(max_length=200)
-	eventCustomer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
-	eventDescription = models.TextField(null=True)
-	eventStart = models.DateTimeField()
-	eventEnd = models.DateTimeField()
+	eventTitle = models.CharField(max_length=200, verbose_name="Title")
+	eventCustomer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True, verbose_name="Customer")
+	eventDescription = models.TextField(null=True, verbose_name="Description")
+	eventStart = models.DateTimeField(verbose_name="Start at")
+	eventEnd = models.DateTimeField(verbose_name="End at")
 	recurrence = RecurrenceField(null=True)
 
 
