@@ -23,10 +23,14 @@ def set_recived(modeladmin, request, queryset):
 set_recived.short_description = 'Set as "Recived"'
 
 class DiaryAdmin(admin.ModelAdmin):
+
     def get_queryset(self, request):
+        current_user = request.user
+        current_user_profile = Profile.objects.filter(user_id=current_user.id)
+        current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
         if not request.user.is_superuser:
             qs = super(DiaryAdmin, self).get_queryset(request)
-            return qs.filter(author=request.user)
+            return qs.filter(services__in=current_user_cashdesk)
         else:
             qs = super(DiaryAdmin, self).get_queryset(request)
             return qs
@@ -68,7 +72,7 @@ class DiaryAdmin(admin.ModelAdmin):
         return super(DiaryAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-    list_display = ('title', 'diaryType', 'customer', '_text', 'created_date', 'sign', 'upload', 'author')
+    list_display = ('title', 'diaryType', 'services', 'customer', '_text', 'created_date', 'sign', 'upload', 'author')
     search_fields = ('diaryType', 'customer')
     list_filter = ('diaryType', 'customer', 'sign', ('created_date', DateRangeFilter))
 
@@ -339,8 +343,6 @@ class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
 
         if not request.user.is_superuser:
             qs = super(PharmaceuticalInventoryMovementsAdmin, self).get_queryset(request)
-            # for cd in current_user_cashdesk:
-                # return qs.filter(cashdesk=cd)
             return qs.filter(cashdesk__in=current_user_cashdesk)
         else:
             qs = super(PharmaceuticalInventoryMovementsAdmin, self).get_queryset(request)
