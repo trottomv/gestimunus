@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     'recurrence',
     'smart_selects',
     'django_readonly_field',
+    # 'rest_framework',
+    # 'report_builder',
 ]
 
 MIDDLEWARE_CLASSES = [
