@@ -1,16 +1,20 @@
 from django.contrib import admin
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from django.contrib.admin import DateFieldListFilter
-from .models import Diary, Agenda, Planner, CashMovements, CashMovementsCustomerDetails, PharmaceuticalInventoryMovements
+from .models import Diary, Agenda, Planner, CashMovements, CashMovementsCustomerDetails, PharmaceuticalInventoryMovements, CashSummary
 from settings.models import MovementsCausal, CashDesk, Profile, Customer, OperatorNew
 import ast
 from datetime import datetime
 import json
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
-
+from django.db.models import Sum, Count
 
 # Register your models here.
+# def current_user(request):
+#     current_user = request.user
+#     current_user_profile = Profile.objects.filter(user_id=current_user.id)
+#     current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
 
 def set_recived(modeladmin, request, queryset):
     for movements in queryset:
@@ -105,6 +109,8 @@ class PlannerAdmin(admin.ModelAdmin):
 
     change_list_template = 'admin/agenda_scheduler_change_list.html'
 
+    def get_actions(self, request):
+        actions = []
 
 class CashMovementsAdminInline(admin.TabularInline):
     model = CashMovementsCustomerDetails
@@ -255,7 +261,74 @@ class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
         return '<a href="/tools/cashmovements/%s">%s</a>' % (obj.prot_id, obj.prot)
     show_prot.allow_tags = True
 
+@admin.register(CashSummary)
+class CashSummaryAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request):
+        return False
 
+    def get_actions(self, request):
+        actions = []
+
+    change_list_template = 'admin/cash_summary_change_list.html'
+
+    def get_queryset(self, request):
+        current_user = request.user
+        current_user_profile = Profile.objects.filter(user_id=current_user.id)
+        current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id')) #.values('cashdesk')
+        if not request.user.is_superuser:
+            qse = super(CashSummaryAdmin, self).get_queryset(request)
+            return qse.filter(cashdesk__in=current_user_cashdesk)
+        else:
+            qse = super(CashSummaryAdmin, self).get_queryset(request)
+            return qse
+
+    def changelist_view(self, request, extra_context=None):
+        current_user = request.user
+        current_user_profile = Profile.objects.filter(user_id=current_user.id)
+        current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id')) #.values('cashdesk')
+
+        response = super(CashSummaryAdmin, self).changelist_view(request, extra_context)
+        qs = response.context_data['cl'].queryset #.values('cashdesk').distinct().order_by('cashdesk') #.filter(cashdesk__in=current_user_cashdesk)
+        # print qs.values('cashdesk').distinct().order_by('cashdesk')
+        # print qs.values('cashdesk').distinct().order_by('cashdesk')
+        # print qs.values('cashdesk').distinct().order_by('cashdesk')
+
+        # try:
+        #     qs = response.context_data['cl'].queryset #.filter(cashdesk__in=current_user_cashdesk)
+        # except (AttributeError, KeyError):
+        #     return response
+
+        # metrics = {
+        #     'total': CashMovements.objects.all().count(),
+        #     'sum': CashMovements.objects.all().aggregate(Sum('amount')), # Sum('price'),
+        # }
+
+        # cashdesk_list = qs.values('cashdesk').distinct().order_by('cashdesk')
+        # for i in cashdesk_list:
+        cashdesk_name = CashDesk.objects.filter(id__in=current_user_cashdesk).values('cashdesk')
+        # extra_context = {
+        #     'cashdesk_list': cashdesk_list,
+        #     'cashdesk_name': cashdesk_name,
+        #      'sum': amount__sum,
+        # }
+        # response.context_data.update(extra_context)
+
+        response.context_data['summary'] = list(
+        qs.values('cashdesk').distinct().order_by('cashdesk'),
+        )
+
+        response.context_data['values'] = list(cashdesk_name.values('cashdesk'))
+        #.values('cashdesk').distinct().order_by('cashdesk')
+        #.values('cashdesk').distinct().order_by('cashdesk')
+        #.filter(cashdesk__in=current_user_cashdesk).distinct()
+        # .values()
+        # .values('cashdesk')
+        # .annotate(**metrics)
+        # .order_by('-total_sales')distinct()
+
+        return response
+
+    list_filter = ('cashdesk', ('operation_date', DateRangeFilter))
 
 class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
 

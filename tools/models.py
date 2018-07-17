@@ -172,6 +172,14 @@ class CashMovementsCustomerDetails(models.Model):
 		# return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
 		return u'%s' % (self.prot)
 
+class CashSummary(CashMovements):
+
+	class Meta:
+		proxy = True
+		verbose_name = 'Cash Summary'
+		verbose_name_plural = 'Cash Summary'
+
+
 class PharmaceuticalInventoryMovements(models.Model):
 
 	class Meta:
