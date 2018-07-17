@@ -74,7 +74,8 @@ class DiaryAdmin(admin.ModelAdmin):
 
     list_display = ('title', 'diaryType', 'services', 'customer', '_text', 'created_date', 'sign', 'upload', 'author')
     search_fields = ('diaryType', 'customer')
-    list_filter = ('diaryType', 'customer', 'sign', ('created_date', DateRangeFilter))
+    list_filter = (('services', RelatedOnlyFieldListFilter), 'diaryType', ('customer', RelatedOnlyFieldListFilter), ('sign', RelatedOnlyFieldListFilter), ('created_date', DateRangeFilter))
+
 
     def _text(self, obj):
         return u'<html>%s</html>' % obj.text
