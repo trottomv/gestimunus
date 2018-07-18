@@ -113,7 +113,7 @@ class CashMovements(models.Model):
 	cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service")
 	causal = models.ForeignKey('settings.MovementsCausal', verbose_name="Causal")
 	mv_type = models.ForeignKey('settings.MovementsType', verbose_name="Type", null=True, blank=True)
-	supplier = models.CharField(max_length=200, verbose_name="Supplier", null=True)
+	supplier = models.CharField(max_length=500, verbose_name="Supplier", null=True)
 	amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount", help_text='(Use "." as decimal separator)')
 	customer = models.ForeignKey('settings.Customer', null=True, blank=True, editable=False, verbose_name="Service Customer")
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
@@ -122,7 +122,9 @@ class CashMovements(models.Model):
 		'settings.OperatorNew',
 		 verbose_name="Sign",
 		 chained_field='cashdesk',
-		 chained_model_field='services')
+		 chained_model_field='services',
+		 null=True,
+		 blank=True)
 
 
 	def publish(self):
@@ -133,14 +135,14 @@ class CashMovements(models.Model):
 		# return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
 		return u'%s' % (self.protocol)
 
-	@property
-	def _cashdesk(self):
-		return u'%s' % (self.cashdesk)
-		# return self.cashdesk
-
-	@_cashdesk.setter
-	def _cashdesk(self, value):
-		self._cashdesk = value
+	# @property
+	# def _cashdesk(self):
+	# 	return u'%s' % (self.cashdesk)
+	# 	# return self.cashdesk
+	#
+	# @_cashdesk.setter
+	# def _cashdesk(self, value):
+	# 	self._cashdesk = value
 
 class CashMovementsCustomerDetails(models.Model):
 
@@ -171,6 +173,7 @@ class CashMovementsCustomerDetails(models.Model):
 	def __str__(self):
 		# return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
 		return u'%s' % (self.prot)
+
 
 class CashSummary(CashMovements):
 

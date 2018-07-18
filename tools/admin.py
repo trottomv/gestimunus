@@ -76,7 +76,6 @@ class DiaryAdmin(admin.ModelAdmin):
     search_fields = ('diaryType', 'customer')
     list_filter = (('services', RelatedOnlyFieldListFilter), 'diaryType', ('customer', RelatedOnlyFieldListFilter), ('sign', RelatedOnlyFieldListFilter), ('created_date', DateRangeFilter))
 
-
     def _text(self, obj):
         return u'<html>%s</html>' % obj.text
     _text.allow_tags = True
@@ -159,14 +158,19 @@ class CashMovementsAdminInline(admin.TabularInline):
         return super(CashMovementsAdminInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_readonly_fields(self, request, obj=None):
-        cmqs = CashMovements.objects.filter(protocol=obj.protocol)[0].recived
+        try:
+            cmqs = CashMovements.objects.filter(protocol=obj.protocol)[0].recived
+        except:
+            pass
 
         if request.user.is_superuser:
             pass
         else:
-            if cmqs == True:
-                return self.readonly_fields + ('cashdesk', 'customer', 'supplier', 'amount', 'note')
-
+            try:
+                if cmqs == True:
+                    return self.readonly_fields + ('cashdesk', 'customer', 'supplier', 'amount', 'note')
+            except:
+                pass
         return self.readonly_fields
 
 
@@ -175,11 +179,11 @@ class CashMovementsAdmin(admin.ModelAdmin):
         current_user = request.user
         current_user_profile = Profile.objects.filter(user_id=current_user.id)
         current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
+        qs = super(CashMovementsAdmin, self).get_queryset(request)
         if not request.user.is_superuser:
-            qs = super(CashMovementsAdmin, self).get_queryset(request)
             return qs.filter(cashdesk__in=current_user_cashdesk)
         else:
-            qs = super(CashMovementsAdmin, self).get_queryset(request)
+            # qs = super(CashMovementsAdmin, self).get_queryset(request)
             return qs
 
     def save_model(self, request, obj, form, change):
@@ -230,7 +234,7 @@ class CashMovementsAdmin(admin.ModelAdmin):
 
         return super(CashMovementsAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    list_display = ('operation_date', 'annulled', 'supplier', 'amount', 'cashdesk', 'causal', 'note', 'protocol', 'recived', 'sign', 'author',)
+    list_display = ('protocol', 'operation_date', 'annulled', 'supplier', 'amount', 'cashdesk', 'causal', 'note', 'recived', 'sign', 'author',)
     list_filter = (('causal', RelatedOnlyFieldListFilter), ('cashdesk', RelatedOnlyFieldListFilter), 'recived', ('operation_date', DateRangeFilter))
     inlines = [CashMovementsAdminInline, ]
     actions = [set_recived, ]
@@ -248,9 +252,11 @@ class CashMovementsAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             pass
         else:
-            if obj.recived == True:
-                return self.readonly_fields + ('recived', 'annulled', 'operation_date', 'document_date', 'cashdesk', 'causal', 'mv_type', 'supplier', 'amount', 'note', 'sign')
-
+            try:
+                if obj.recived == True:
+                    return self.readonly_fields + ('recived', 'annulled', 'operation_date', 'document_date', 'cashdesk', 'causal', 'mv_type', 'supplier', 'amount', 'note', 'sign')
+            except:
+                pass
         return self.readonly_fields
 
 
@@ -287,53 +293,65 @@ class CashSummaryAdmin(admin.ModelAdmin):
             qse = super(CashSummaryAdmin, self).get_queryset(request)
             return qse
 
+    # # @render_to('tools:cash_summary_change_list.html')
+    # # @login_required
+    def cash_summary_change_list(request):
+        sumcms = CashMovements.objects.all() #.aggregate(models.Sum('amount'))
+
+        return render(request, 'tools/cashsummary/', {'sumcms': sumcms})
+        # return { "message": "message text"}
+
     def changelist_view(self, request, extra_context=None):
         current_user = request.user
         current_user_profile = Profile.objects.filter(user_id=current_user.id)
         current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id')) #.values('cashdesk')
-
+        entry = MovementsCausal.objects.filter(in_out=1)
+        exit = MovementsCausal.objects.filter(in_out=2)
         response = super(CashSummaryAdmin, self).changelist_view(request, extra_context)
-        qs = response.context_data['cl'].queryset #.values('cashdesk').distinct().order_by('cashdesk') #.filter(cashdesk__in=current_user_cashdesk)
-        # print qs.values('cashdesk').distinct().order_by('cashdesk')
-        # print qs.values('cashdesk').distinct().order_by('cashdesk')
-        # print qs.values('cashdesk').distinct().order_by('cashdesk')
+        # qs = response.context_data['cl'].queryset
 
-        # try:
-        #     qs = response.context_data['cl'].queryset #.filter(cashdesk__in=current_user_cashdesk)
-        # except (AttributeError, KeyError):
-        #     return response
+        try:
+            qs = response.context_data['cl'].queryset #.filter(causal_id=exit)
+        except (AttributeError, KeyError):
+            return response
 
-        # metrics = {
-        #     'total': CashMovements.objects.all().count(),
-        #     'sum': CashMovements.objects.all().aggregate(Sum('amount')), # Sum('price'),
-        # }
-
-        # cashdesk_list = qs.values('cashdesk').distinct().order_by('cashdesk')
-        # for i in cashdesk_list:
-        cashdesk_name = CashDesk.objects.filter(id__in=current_user_cashdesk).values('cashdesk')
-        # extra_context = {
-        #     'cashdesk_list': cashdesk_list,
-        #     'cashdesk_name': cashdesk_name,
-        #      'sum': amount__sum,
-        # }
-        # response.context_data.update(extra_context)
+        metrics = {
+            "sum": Sum('amount'),
+            "name": Count('cashdesk'),
+        }
 
         response.context_data['summary'] = list(
-        qs.values('cashdesk').distinct().order_by('cashdesk'),
+        qs
         )
 
-        response.context_data['values'] = list(cashdesk_name.values('cashdesk'))
-        #.values('cashdesk').distinct().order_by('cashdesk')
-        #.values('cashdesk').distinct().order_by('cashdesk')
-        #.filter(cashdesk__in=current_user_cashdesk).distinct()
-        # .values()
-        # .values('cashdesk')
-        # .annotate(**metrics)
-        # .order_by('-total_sales')distinct()
+        response.context_data['summary_cd'] = list(
+        qs.values('cashdesk__id', 'cashdesk__cashdesk', 'cashdesk__opening_amount', 'cashdesk__centercost').filter(cashdesk__in=current_user_cashdesk).distinct().order_by('cashdesk__centercost').annotate(**metrics)
+        )
+
+        # response.context_data['summary_name'] = list(
+        # qs.values('cashdesk_id') #.filter(cashdesk__in=CashDesk.objects.filter(centercost=1124)) #.values('cashdesk') #.annotate(**metrics)
+        # )
+
+        response.context_data['summary_exit'] = list(
+        qs.filter(causal_id__in=exit).values('cashdesk__id').distinct().order_by('cashdesk').annotate(**metrics)
+        )
+
+        response.context_data['summary_entry'] = list(
+        qs.filter(causal_id__in=entry).values('cashdesk__id').distinct().order_by('cashdesk').annotate(**metrics)
+        )
+
+
+        # cashdesk_name = CashDesk.objects.values('cashdesk').filter(id__in=current_user_cashdesk)
+
+        # response.context_data['summary_sum'] = list(
+        # qs.filter(cashdesk__in=current_user_cashdesk).aggregate(Sum('amount')).values()
+        # )
+
+        # response.context_data['values'] = list(cashdesk_name.values('cashdesk'))
 
         return response
 
-    list_filter = ('cashdesk', ('operation_date', DateRangeFilter))
+    list_filter = (('cashdesk', RelatedOnlyFieldListFilter), ('operation_date', DateRangeFilter))
 
 class PharmaceuticalInventoryMovementsAdmin(admin.ModelAdmin):
 

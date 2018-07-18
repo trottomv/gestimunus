@@ -1,6 +1,7 @@
 {% extends "admin/change_list.html" %}
-# sales/templates/admin/sale_summary_change_list.html
+# gestimunus/templates/admin/cash_summary_change_list.html
 
+{% load mathfilters %}
 
 {% block content_title %}
     <span class="navbar-brand">Cash Summary </span>
@@ -10,23 +11,35 @@
 
 {% block result_list %}
     <!-- Our content goes here… -->
+    <span><u>Data Range</u>:
+      <em>From</em> <b> {% with summary|last as last %} {{ last.operation_date }} {% endwith %} |</b>
+      <em>To</em> <b>{{ summary.0.operation_date }}</b> </span>
+    <p>.</p>
+
     <table class="table">
       <thead>
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Service Cash Desk</th>
-          <th scope="col">Cash Opening</th>
-          <th scope="col">Cash Balance</th>
+          <th scope="col">Sum Cash Movements</th>
         </tr>
       </thead>
       <tbody>
-        {% for row in summary %}
-        <tr>
-          <th scope="row">{{ row.cashdesk }}</th>
-          <td width="30%">{{ row.cashdesk.name }}</td>
-          <td>{{ row.total }}</td>
-          <td>@mdo</td>
-        </tr>
+        {{summary_entry}}
+        {{summary_exit}}
+        {% for row in summary_cd %}
+              <tr>
+                <th scope="row">{{ row.cashdesk__centercost }}</th>
+                <td width="30%">{{ row.cashdesk__cashdesk }}</td>
+                <td>{{ 0 | sub:row.sum }} €</td>
+              </tr>
+        {% endfor %}
+        <!-- <tr style=”font-weight:bold; border-top:2px solid #DDDDDD;”>
+          <td> Total </td>
+          <td> {{ summary_sum.total }} </td>
+          <td> {{ summary_sum.total_sales | default:0 }}$ </td>
+          <td> 100% </td>
+        </tr> -->
         <!-- <tr>
           <th scope="row">2</th>
           <td>Jacob</td>
@@ -39,10 +52,11 @@
           <td>the Bird</td>
           <td>@twitter</td>
         </tr> -->
-        {% endfor %}
       </tbody>
     </table>
 
+    <!-- {% for sumcm in sumcms %} -->
+    <!-- {% endfor %} -->
 <!-- from howto!!! -->
     <!-- <div class="results">
     <table>

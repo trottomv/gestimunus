@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'recurrence',
     'smart_selects',
     'django_readonly_field',
+    'mathfilters',
     # 'rest_framework',
     # 'report_builder',
 ]

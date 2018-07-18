@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.db import models
 from datetime import datetime
-from .models import Agenda #, CashMovementsCustomerDetails
+from .models import Agenda, CashMovements #, CashMovementsCustomerDetails
 import ast
 import json
 from django.http import HttpResponse
@@ -34,6 +34,14 @@ def eventsFeed(request):
         json_list.append(json_entry)
 
     return HttpResponse(json.dumps(json_list), content_type='application/json')
+
+# @render_to('tools:cash_summary_change_list.html')
+# @login_required
+def cash_summary_change_list(request):
+    sumcms = CashMovements.objects.all().aggregate(models.Sum('amount'))
+
+    return render(request, 'admin/cash_summary_change_list.html', {'sumcms': sumcms})
+    # return { "message": "message text"}
 
 # def supplier(request):
 #     if request.method == 'GET':
