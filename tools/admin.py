@@ -256,11 +256,21 @@ class CashMovementsAdmin(admin.ModelAdmin):
 
 
 class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        current_user = request.user
+        current_user_profile = Profile.objects.filter(user_id=current_user.id)
+        current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
+        qs = super(CashMovementsCustomerDetailsAdmin, self).get_queryset(request)
+        if not request.user.is_superuser:
+            return qs.filter(cashdesk__in=current_user_cashdesk)
+        else:
+            return qs
+
     def has_add_permission(self, request):
         return False
 
-    list_display = ('show_prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
-    list_filter = ('customer', ('operation_date', DateRangeFilter))
+    list_display = ('show_prot', 'operation_date', 'cashdesk', 'customer', 'supplier', 'amount', 'note')
+    list_filter = (('customer' , RelatedOnlyFieldListFilter), ('operation_date', DateRangeFilter))
     readonly_fields = ('prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
 
     def show_prot(self, obj):
