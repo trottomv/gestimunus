@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Operator, OperatorNew, Customer, DiariesType, CashDesk, MovementsCausal, Profile, MovementsType
+from .models import Operator, OperatorNew, Customer, DiariesType, CashDesk, MovementsCausal, Profile, MovementsType, CashPayment
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
@@ -59,6 +59,9 @@ class CustomerAdmin(admin.ModelAdmin):
 class DiariesTypeAdmin(admin.ModelAdmin):
     list_display = ('diarytype', 'created_date')
 
+class CashPaymentAdmin(admin.ModelAdmin):
+    list_display = ('cashpayment', )
+
 # admin.site.register(Operator, OperatorAdmin)
 admin.site.register(OperatorNew, OperatorNewAdmin)
 admin.site.register(Customer, CustomerAdmin)
@@ -68,4 +71,5 @@ admin.site.register(MovementsCausal)
 admin.site.register(MovementsType)
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
+admin.site.register(CashPayment, CashPaymentAdmin)
 admin.site.site_header = 'Gesti-Munus'

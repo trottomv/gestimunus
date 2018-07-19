@@ -9,6 +9,19 @@ from django.utils.translation import gettext as _
 
 
 # Create your models here.
+class CashPayment(models.Model):
+	class Meta:
+		verbose_name_plural = _("Cash Payments")
+		verbose_name = _("Cash Payments")
+
+	cashpayment =  models.CharField(max_length=200, verbose_name=_('Cash Payment'))
+
+	def publish(self):
+		self.published_date = timezone.now()
+		self.save()
+
+	def __str__(self):
+		return u'%s' % (self.cashpayment)
 
 class CashDesk(models.Model):
 	class Meta:
@@ -71,6 +84,7 @@ class MovementsCausal(models.Model):
 	causal = models.CharField(max_length=200)
 	admin = models.BooleanField(default=False, help_text='[Select for assign only to admins]', verbose_name="Admin Only", blank=True)
 	in_out = models.PositiveSmallIntegerField(choices=IN_OUT, null=True, verbose_name="In / Out")
+	cashpaymant = models.ForeignKey("CashPayment", verbose_name=_('Cash Payment'), null=True)
 
 	def publish(self):
 		self.published_date = timezone.now()
