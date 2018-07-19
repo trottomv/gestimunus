@@ -123,8 +123,7 @@ class CashMovements(models.Model):
 		 verbose_name="Sign",
 		 chained_field='cashdesk',
 		 chained_model_field='services',
-		 null=True,
-		 blank=True)
+		 null=True)
 
 
 	def publish(self):

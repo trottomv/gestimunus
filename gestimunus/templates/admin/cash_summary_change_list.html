@@ -5,8 +5,40 @@
 
 {% block content_title %}
     <span class="navbar-brand">Cash Summary </span>
+    <script>
+    var totalsIn = [0, 0, 0, 0, 0];
+    var totalsOut = [0, 0, 0, 0, 0];
+    $(document).ready(function() {
 
-    <!-- <h1> Sales Summary </h1> -->
+        var $dataRows = $(".table tr:not('.row, .title')");
+        console.log($dataRows)
+
+        $dataRows.each(function(i) {
+            $(this).find(".cashin").each(function(j) {
+                totalsIn[j] += parseFloat($(this).html());
+            });
+        });
+
+        $(".table td.sumin").each(function(i) {
+            $(this).html(totalsIn[i].toFixed(2) + " €");
+        });
+
+        $dataRows.each(function(i) {
+            $(this).find(".cashout").each(function(j) {
+                totalsOut[j] += parseFloat($(this).html());
+            });
+        });
+
+        $(".table td.sumout").each(function(i) {
+            $(this).html(totalsOut[i].toFixed(2) + " €");
+        });
+
+        $(".table th.cashbalance").each(function(i) {
+            $(this).html(totalsIn[i] + totalsOut[i] + " €");
+        });
+
+    });
+    </script>
 {% endblock %}
 
 {% block result_list %}
@@ -16,97 +48,79 @@
       <em>To</em> <b>{{ summary.0.operation_date }}</b> </span>
     <p>.</p>
 
+    <h3><strong>CASH IN</strong></h3>
     <table class="table">
       <thead>
-        <tr>
+        <tr class="title">
           <th scope="col">ID</th>
           <th scope="col">Service Cash Desk</th>
-          <th scope="col">Sum Cash Movements</th>
+          <th scope="col">Sum IN</th>
         </tr>
       </thead>
       <tbody>
-        {{summary_entry}}
-        {{summary_exit}}
-        {% for row in summary_cd %}
-              <tr>
-                <th scope="row">{{ row.cashdesk__centercost }}</th>
-                <td width="30%">{{ row.cashdesk__cashdesk }}</td>
-                <td>{{ 0 | sub:row.sum }} €</td>
-              </tr>
+        <!-- {{summary_cd}} -->
+        {% for cashin in summary_cd %}
+          {% if cashin.causal_id__in_out == 1 %}
+            <tr class="{{cashin.cashdesk__centercost}}">
+              <th scope="row">{{ cashin.cashdesk__centercost }}</th>
+              <td width="40%">{{ cashin.cashdesk__cashdesk }}</td>
+              <td class="cashin">{{ cashin.sum }} €</td>
+            </tr>
+          {% endif %}
         {% endfor %}
-        <!-- <tr style=”font-weight:bold; border-top:2px solid #DDDDDD;”>
-          <td> Total </td>
-          <td> {{ summary_sum.total }} </td>
-          <td> {{ summary_sum.total_sales | default:0 }}$ </td>
-          <td> 100% </td>
-        </tr> -->
-        <!-- <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
+        <tr style="color:#228b22">
+          <td></td>
+          <th> TOTAL </th>
+          <td class="sumin"></td>
         </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry</td>
-          <td>the Bird</td>
-          <td>@twitter</td>
-        </tr> -->
       </tbody>
     </table>
 
-    <!-- {% for sumcm in sumcms %} -->
-    <!-- {% endfor %} -->
-<!-- from howto!!! -->
-    <!-- <div class="results">
-    <table>
+    <h3><strong>CASH OUT</strong></h3>
+    <table class="table">
+      <thead>
+        <tr class="title">
+          <th scope="col">ID</th>
+          <th scope="col">Service Cash Desk</th>
+          <th scope="col">Sum OUT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- {{summary_cd}} -->
+        {% for cashout in summary_cd %}
+              <tr class="{{cashout.cashdesk__centercost}}">
+                {% if cashout.causal_id__in_out == 2 %}
+                <th scope="row">{{ cashout.cashdesk__centercost }}</th>
+                <td width="40%">{{ cashout.cashdesk__cashdesk }}</td>
+                <td class="cashout">{{ 0| sub:cashout.sum }} €</td>
+                {% endif %}
+              </tr>
+        {% endfor %}
+        <tr style="color:#ff0000">
+          <td></td>
+          <th> TOTAL </th>
+          <td class="sumout"></td>
+        </tr>
+      </tbody>
+    </table>
 
-    <thead>
-      <tr>
-        <th>
-          <div class="text">
-            <a href="#">Category</a>
-          </div>
-        </th>
-        <th>
-          <div class="text">
-            <a href="#">Total</a>
-          </div>
-        </th>
-        <th>
-          <div class="text">
-            <a href="#">Total Sales</a>
-          </div>
-        </th>
-        <th>
-          <div class="text">
-            <a href="#">
-              <strong>% Of Total Sales</strong>
-            </a>
-          </div>
-        </th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {% for row in summary %}
-      <tr class="{% cycle 'row1' 'row2' %}">
-        <td> {{ row.sale__category__name }} </td>
-        <td> {{ row.total }} </td>
-        <td> {{ row.total_sales | default:0 }}$ </td>
-        <td>
-          <strong>
-          {{ row.total_sales |
-              default:0 |
-              percentof:summary_total.total_sales }}
-          </strong>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-
-  </table>
-</div> -->
+    <h3><strong>CASH BALANCE</strong></h3>
+    <table class="table">
+      <thead>
+        <tr class="title">
+          <th></th>
+          <th width="58%"></th>
+          <th>TOTAL BALANCE</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="color:#0000ff">
+          <td></td>
+          <td></td>
+          <th class="cashbalance"></th>
+        </tr>
+      </tbody>
+    </table>
 
 {% endblock %}
 

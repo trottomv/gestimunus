@@ -11,10 +11,6 @@ from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
 from django.db.models import Sum, Count
 
 # Register your models here.
-# def current_user(request):
-#     current_user = request.user
-#     current_user_profile = Profile.objects.filter(user_id=current_user.id)
-#     current_user_cashdesk = CashDesk.objects.filter(id__in=Profile.cashdeskowner.through.objects.filter(profile_id=current_user_profile).values('cashdesk_id'))
 
 def set_recived(modeladmin, request, queryset):
     for movements in queryset:
@@ -183,7 +179,6 @@ class CashMovementsAdmin(admin.ModelAdmin):
         if not request.user.is_superuser:
             return qs.filter(cashdesk__in=current_user_cashdesk)
         else:
-            # qs = super(CashMovementsAdmin, self).get_queryset(request)
             return qs
 
     def save_model(self, request, obj, form, change):
@@ -293,14 +288,6 @@ class CashSummaryAdmin(admin.ModelAdmin):
             qse = super(CashSummaryAdmin, self).get_queryset(request)
             return qse
 
-    # # @render_to('tools:cash_summary_change_list.html')
-    # # @login_required
-    def cash_summary_change_list(request):
-        sumcms = CashMovements.objects.all() #.aggregate(models.Sum('amount'))
-
-        return render(request, 'tools/cashsummary/', {'sumcms': sumcms})
-        # return { "message": "message text"}
-
     def changelist_view(self, request, extra_context=None):
         current_user = request.user
         current_user_profile = Profile.objects.filter(user_id=current_user.id)
@@ -308,7 +295,6 @@ class CashSummaryAdmin(admin.ModelAdmin):
         entry = MovementsCausal.objects.filter(in_out=1)
         exit = MovementsCausal.objects.filter(in_out=2)
         response = super(CashSummaryAdmin, self).changelist_view(request, extra_context)
-        # qs = response.context_data['cl'].queryset
 
         try:
             qs = response.context_data['cl'].queryset #.filter(causal_id=exit)
@@ -317,7 +303,7 @@ class CashSummaryAdmin(admin.ModelAdmin):
 
         metrics = {
             "sum": Sum('amount'),
-            "name": Count('cashdesk'),
+            "count": Count('cashdesk'),
         }
 
         response.context_data['summary'] = list(
@@ -325,12 +311,18 @@ class CashSummaryAdmin(admin.ModelAdmin):
         )
 
         response.context_data['summary_cd'] = list(
-        qs.values('cashdesk__id', 'cashdesk__cashdesk', 'cashdesk__opening_amount', 'cashdesk__centercost').filter(cashdesk__in=current_user_cashdesk).distinct().order_by('cashdesk__centercost').annotate(**metrics)
+        qs
+        .values('cashdesk__id', 'cashdesk__cashdesk', 'cashdesk__opening_amount', 'cashdesk__centercost', 'causal_id__in_out').filter(cashdesk__in=current_user_cashdesk).distinct().order_by('cashdesk__centercost').annotate(**metrics)
+        # .values('cashdesk__id', 'cashdesk__cashdesk', 'cashdesk__opening_amount', 'cashdesk__centercost', 'causal_id__in_out').filter(causal_id__in_out=2).filter(cashdesk__in=current_user_cashdesk).distinct().order_by('cashdesk__centercost').annotate(**metrics)
         )
 
-        # response.context_data['summary_name'] = list(
-        # qs.values('cashdesk_id') #.filter(cashdesk__in=CashDesk.objects.filter(centercost=1124)) #.values('cashdesk') #.annotate(**metrics)
-        # )
+        response.context_data['summary_causal_entry'] = list(
+        qs.values('causal_id__in_out', 'cashdesk__cashdesk').filter(causal_id__in_out=1).distinct().order_by('cashdesk').annotate(**metrics)
+        )
+
+        response.context_data['summary_causal_exit'] = list(
+        qs.values('causal_id__in_out', 'causal_id__cashpaymant', 'cashdesk__cashdesk').filter(causal_id__in_out=2).distinct().order_by('cashdesk').annotate(**metrics)
+        )
 
         response.context_data['summary_exit'] = list(
         qs.filter(causal_id__in=exit).values('cashdesk__id').distinct().order_by('cashdesk').annotate(**metrics)
@@ -339,15 +331,6 @@ class CashSummaryAdmin(admin.ModelAdmin):
         response.context_data['summary_entry'] = list(
         qs.filter(causal_id__in=entry).values('cashdesk__id').distinct().order_by('cashdesk').annotate(**metrics)
         )
-
-
-        # cashdesk_name = CashDesk.objects.values('cashdesk').filter(id__in=current_user_cashdesk)
-
-        # response.context_data['summary_sum'] = list(
-        # qs.filter(cashdesk__in=current_user_cashdesk).aggregate(Sum('amount')).values()
-        # )
-
-        # response.context_data['values'] = list(cashdesk_name.values('cashdesk'))
 
         return response
 
