@@ -1,13 +1,17 @@
 image: python:2.7
 
-script:
-  - pip install -r requirements.txt 
+all_tests:
+  script:
+    - pip install pip
+    - pip install -r requirements.txt
+  when: on_success
+  only:
+    - dev
 
-services: 
+services:
   - postgres:latest
 
-variables:  
-  POSTGRES_DB: dev  
-  POSTGRES_USER: dev  
-  POSTGRES_PASSWORD: dev  
-
+variables:
+  POSTGRES_DB: dev
+  POSTGRES_USER: dev
+  POSTGRES_PASSWORD: dev
