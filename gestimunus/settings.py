@@ -63,7 +63,6 @@ INSTALLED_APPS = [
     'django_readonly_field',
     'mathfilters',
     # 'rest_framework',
-    # 'report_builder',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -95,7 +94,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'django.template.context_processors.media',
                 # 'adminlte.utils.admin_config',
             ],
         },
@@ -105,16 +103,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'gestimunus.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-#DATABASES = {
-    #'default': {
-        #'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    #}
-#}
 
 DATABASES = {
         'default': {
@@ -183,70 +171,6 @@ STATICFILES_DIRS = [
 ]
 
 ## LOG CONFIG
-# import logging.config
-# import os
-# from django.utils.log import DEFAULT_LOGGING
-
-# Disable Django's logging setup
-# LOGGING_CONFIG = None
-#
-# LOGGING = {
-#     'version': 1,
-#     'formatters': {
-#         'verbose': {
-#             'format': '[%(asctime)s] %(levelname)s [%(pathname)s:%(lineno)s] %(message)s',
-#             'datefmt' : "%d/%b/%Y %H:%M:%S"
-#         },
-#         'standard': {
-#             'format' : "[%(asctime)s] %(levelname)s %(message)s",
-#             'datefmt' : "%d/%b/%Y %H:%M:%S"
-#         },
-#     },
-#     'handlers': {
-#         'null': {
-#             'level':'DEBUG',
-#             'class':'logging.NullHandler',
-#         },
-#         'logfile': {
-#             'level':'INFO',
-#             'class':'logging.handlers.RotatingFileHandler',
-#             'filename': "gestimunus/static/logs/gestimunus.log",
-#             'maxBytes': 50000,
-#             'backupCount': 2,
-#             'formatter': 'verbose',
-#         },
-#         'console':{
-#             'level':'INFO',
-#             'class':'logging.StreamHandler',
-#             'formatter': 'standard'
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers':['console'],
-#             'propagate': True,
-#             'level':'WARN',
-#         },
-#         # 'django.request': {
-#         #     'handlers':['console'],
-#         #     'propagate': True,
-#         #     'level':'WARN',
-#         # },
-#         'django.db.backends': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#             'propagate': False,
-#         },
-#         'textlogger': {
-#             'handlers': ['console', 'logfile'],
-#             'level': 'INFO',
-#         },
-#     }
-# }
-#
-# import logging.config
-# logging.config.dictConfig(LOGGING)
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

@@ -46,11 +46,8 @@ class Diary(models.Model):
 		null = True,
 		blank= True)
 	title = models.CharField(max_length=200)
-	# text = models.TextField()
 	text = HTMLField('Content', blank=True)
 	upload = models.FileField(upload_to=settings.STATIC_UPLOAD, null=True, blank=True)
-	# upload = models.FileField(upload_to='uploads/%Y/%m/%d/', null=True, blank=True)
-	# sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE)
 	sign = ChainedForeignKey(
 		'settings.OperatorNew',
 		 verbose_name="Sign",
@@ -118,7 +115,6 @@ class CashMovements(models.Model):
 	amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount", help_text='(Use "." as decimal separator)')
 	customer = models.ForeignKey('settings.Customer', null=True, blank=True, editable=False, verbose_name="Service Customer")
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
-	# sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE, verbose_name="Sign")
 	sign = ChainedForeignKey(
 		'settings.OperatorNew',
 		 verbose_name="Sign",
@@ -135,27 +131,15 @@ class CashMovements(models.Model):
 		# return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
 		return u'%s' % (self.protocol)
 
-	# @property
-	# def _cashdesk(self):
-	# 	return u'%s' % (self.cashdesk)
-	# 	# return self.cashdesk
-	#
-	# @_cashdesk.setter
-	# def _cashdesk(self, value):
-	# 	self._cashdesk = value
 
 class CashMovementsCustomerDetails(models.Model):
 
 	class Meta:
 		verbose_name_plural = "Cash Movements Customer Details"
 
-	# class ReadonlyMeta:
-	# 	readonly = ["cashdesk"]
-
 	prot = models.ForeignKey('CashMovements')
 	cashdesk = models.ForeignKey('settings.CashDesk', null=True)
-	operation_date = models.DateField(default=timezone.now, editable=False) # models.DateField(verbose_name="Operation Date")
-	# customer = models.ForeignKey('settings.Customer', null=True, blank=True, verbose_name="Service Customer")
+	operation_date = models.DateField(default=timezone.now, editable=False)
 	customer = ChainedForeignKey(
         'settings.Customer',
 		verbose_name='Service Customer',
@@ -171,7 +155,6 @@ class CashMovementsCustomerDetails(models.Model):
 		self.save()
 
 	def __str__(self):
-		# return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
 		return u'%s' % (self.prot)
 
 
@@ -214,12 +197,9 @@ class PharmaceuticalInventoryMovements(models.Model):
 		auto_choose = True,
 		show_all = False,
 		null = True)
-	# customer = models.ForeignKey('settings.Customer', null=True, verbose_name="Customer")
-	# drug = models.ForeignKey('settings.Customer', verbose_name="Generic Drug")
 	drug = models.CharField(max_length=200, blank=True, verbose_name="Generic Drug")
 	quantity = models.IntegerField()
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
-	# sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE, verbose_name="Sign")
 	sign = ChainedForeignKey(
 		'settings.OperatorNew',
 		 verbose_name="Sign",
@@ -231,5 +211,4 @@ class PharmaceuticalInventoryMovements(models.Model):
 		self.save()
 
 	def __str__(self):
-		# return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
 		return u'%s' % (self.id)
