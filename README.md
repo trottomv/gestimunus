@@ -1,3 +1,3 @@
-![](uploads/2018/06/18/gestimunus-inline.png)
+![](media/uploads/2018/07/20/gestimunus-inline.png)
 
 social assistance service management [beta version]
