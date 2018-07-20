@@ -322,24 +322,24 @@ class CashSummaryAdmin(admin.ModelAdmin):
 
         response.context_data['summary_cd'] = list(
         qs
-        .values('cashdesk__id', 'cashdesk__cashdesk', 'cashdesk__opening_amount', 'cashdesk__centercost', 'causal_id__in_out').filter(cashdesk__in=current_user_cashdesk).distinct().order_by('cashdesk__centercost').annotate(**metrics)
+        .values('cashdesk__id', 'cashdesk__cashdesk', 'cashdesk__opening_amount', 'cashdesk__centercost', 'causal_id__in_out').distinct().order_by('cashdesk__centercost').annotate(**metrics) #.filter(cashdesk__in=current_user_cashdesk)
         )
 
-        response.context_data['summary_causal_entry'] = list(
-        qs.values('causal_id__in_out', 'cashdesk__cashdesk').filter(causal_id__in_out=1).distinct().order_by('cashdesk').annotate(**metrics)
-        )
-
-        response.context_data['summary_causal_exit'] = list(
-        qs.values('causal_id__in_out', 'causal_id__cashpaymant', 'cashdesk__cashdesk').filter(causal_id__in_out=2).distinct().order_by('cashdesk').annotate(**metrics)
-        )
-
-        response.context_data['summary_exit'] = list(
-        qs.filter(causal_id__in=exit).values('cashdesk__id').distinct().order_by('cashdesk').annotate(**metrics)
-        )
-
-        response.context_data['summary_entry'] = list(
-        qs.filter(causal_id__in=entry).values('cashdesk__id').distinct().order_by('cashdesk').annotate(**metrics)
-        )
+        # response.context_data['summary_causal_entry'] = list(
+        # qs.values('causal_id__in_out', 'cashdesk__cashdesk').filter(causal_id__in_out=1).distinct().order_by('cashdesk').annotate(**metrics)
+        # )
+        #
+        # response.context_data['summary_causal_exit'] = list(
+        # qs.values('causal_id__in_out', 'causal_id__cashpaymant', 'cashdesk__cashdesk').filter(causal_id__in_out=2).distinct().order_by('cashdesk').annotate(**metrics)
+        # )
+        #
+        # response.context_data['summary_exit'] = list(
+        # qs.filter(causal_id__in=exit).values('cashdesk__id').distinct().order_by('cashdesk').annotate(**metrics)
+        # )
+        #
+        # response.context_data['summary_entry'] = list(
+        # qs.filter(causal_id__in=entry).values('cashdesk__id').distinct().order_by('cashdesk').annotate(**metrics)
+        # )
 
         return response
 
