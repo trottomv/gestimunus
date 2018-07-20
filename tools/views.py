@@ -35,13 +35,13 @@ def eventsFeed(request):
 
     return HttpResponse(json.dumps(json_list), content_type='application/json')
 
-# @render_to('tools:cash_summary_change_list.html')
-# @login_required
-def cash_summary_change_list(request):
-    sumcms = CashMovements.objects.all().aggregate(models.Sum('amount'))
-
-    return render(request, 'admin/cash_summary_change_list.html', {'sumcms': sumcms})
-    # return { "message": "message text"}
+# # @render_to('tools:cash_summary_change_list.html')
+# # @login_required
+# def cash_summary_change_list(request):
+#     sumcms = CashMovements.objects.all().aggregate(models.Sum('amount'))
+#
+#     return render(request, 'admin/cash_summary_change_list.html', {'sumcms': sumcms})
+#     # return { "message": "message text"}
 
 # def supplier(request):
 #     if request.method == 'GET':

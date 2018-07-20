@@ -26,7 +26,7 @@ SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-DEBUG = False
+# DEBUG = False
 
 # ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['*']
@@ -174,10 +174,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_UPLOAD = 'uploads/' + datetime.now().strftime("%Y")+'/'+datetime.now().strftime("%m")+'/'+datetime.now().strftime("%d")+'/'
-MEDIA_ROOT = [ os.path.join(BASE_DIR, "uploads/") ]
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "gestimunus/static/"),
 ]

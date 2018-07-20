@@ -49,6 +49,7 @@ class Diary(models.Model):
 	# text = models.TextField()
 	text = HTMLField('Content', blank=True)
 	upload = models.FileField(upload_to=settings.STATIC_UPLOAD, null=True, blank=True)
+	# upload = models.FileField(upload_to='uploads/%Y/%m/%d/', null=True, blank=True)
 	# sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE)
 	sign = ChainedForeignKey(
 		'settings.OperatorNew',
