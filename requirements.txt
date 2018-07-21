@@ -8,8 +8,8 @@ django-export-action>=0.1.1
 six>=1.11.0
 pytz>=2018.4
 django-tinymce4-lite>=1.7.1
--e git+https://github.com/rodrigoamaral/django-fullcalendar.git#egg=django-fullcalendar
+git+git://github.com/rodrigoamaral/django-fullcalendar.git#egg=django-fullcalendar
 django-lteadmin>=0.3.0a0
 django-recurrence>=1.6.0
--e git+https://github.com/digi604/django-smart-selects.git@js-unlinting-fixes
-pipenv>=2018.7.1 
+git+git://github.com/digi604/django-smart-selects.git@js-unlinting-fixes
+pipenv>=2018.7.1
