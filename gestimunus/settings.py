@@ -161,14 +161,16 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
 STATIC_UPLOAD = 'uploads/' + datetime.now().strftime("%Y")+'/'+datetime.now().strftime("%m")+'/'+datetime.now().strftime("%d")+'/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "gestimunus/static/"),
 ]
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 ## LOG CONFIG
 LOGGING = {
