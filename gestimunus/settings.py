@@ -25,8 +25,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
+# DEBUG = True
+DEBUG = False
+# DEBUG = config('DEBUG', default=False, cast=bool)
 
 # ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['*']
@@ -113,6 +114,7 @@ DATABASES = {
                           'HOST': env("DBHOST"),
                           'PORT': '',
                       }
+        # 'default': dj_database_url.config(default=config('DATABASE_URL'))
 }
 
 # Password validation
@@ -170,7 +172,7 @@ STATIC_UPLOAD = 'uploads/' + datetime.now().strftime("%Y")+'/'+datetime.now().st
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "gestimunus/static/"),
 ]
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 ## LOG CONFIG
 LOGGING = {
