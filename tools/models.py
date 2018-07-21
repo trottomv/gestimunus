@@ -9,6 +9,7 @@ from recurrence.fields import RecurrenceField
 from settings.models import CashDesk, MovementsCausal, Customer, Profile
 from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
 
+
 # Create your models here.
 
 def protocolgen():
