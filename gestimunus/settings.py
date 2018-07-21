@@ -14,6 +14,7 @@ import os
 
 from getenv import env
 from datetime import datetime
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,7 +31,7 @@ DEBUG = False
 # DEBUG = config('DEBUG', default=False, cast=bool)
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', '.herokuapp.com']
 
 
 # Smart Select settings
@@ -116,6 +117,9 @@ DATABASES = {
                       }
         # 'default': dj_database_url.config(default=config('DATABASE_URL'))
 }
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
