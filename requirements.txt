@@ -18,7 +18,7 @@ django-filter==1.1.0
 django-flat-responsive==2.0
 django-flat-theme==1.1.4
 django-formtools==2.1
-git+t://github.com/rodrigoamaral/django-fullcalendar.git@d116fcfc2093e57035932a9ea7c111d449fd7e4d#egg=django_fullcalendar
+git+git://github.com/rodrigoamaral/django-fullcalendar.git@d116fcfc2093e57035932a9ea7c111d449fd7e4d#egg=django_fullcalendar
 django-getenv==1.3.2
 django-jet==1.0.7
 django-lteadmin==0.3.0a0
