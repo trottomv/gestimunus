@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Operator, OperatorNew, Customer, DiariesType, CashDesk, MovementsCausal, Profile, MovementsType, CashPayment
+from .models import OperatorNew, Customer, DiariesType, CashDesk, MovementsCausal, Profile, MovementsType, CashPayment
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
@@ -25,10 +25,10 @@ class CashDeskAdmin(admin.ModelAdmin):
     search_fields = ('centercost', 'cashdesk')
     list_filter = ('cashdesk',)
 
-class OperatorAdmin(admin.ModelAdmin):
-    list_display = ('surname', 'name', 'qualify', 'created_date')
-    search_fields = ('name', 'surname')
-    list_filter = ('surname', 'qualify',)
+# class OperatorAdmin(admin.ModelAdmin):
+#     list_display = ('surname', 'name', 'qualify', 'created_date')
+#     search_fields = ('name', 'surname')
+#     list_filter = ('surname', 'qualify',)
 
 class OperatorNewAdmin(admin.ModelAdmin):
     list_display = ('surname', 'name', 'qualify', 'created_date')

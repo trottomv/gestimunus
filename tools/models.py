@@ -14,11 +14,15 @@ from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
 
 def protocolgen():
 	# return 201803001 + CashMovements.objects.count() + 1
-	qs = CashMovements.objects.latest('protocol')
-	if str(qs.protocol)[0:6] == timezone.now().strftime("%Y%m"):
-		protocol = int(timezone.now().strftime("%Y") + timezone.now().strftime("%m") + format(int(str(qs.protocol)[6:]) + 1, "04"))
-		return protocol
-	else:
+	try:
+		qs = CashMovements.objects.latest('protocol')
+		if str(qs.protocol)[0:6] == timezone.now().strftime("%Y%m"):
+			protocol = int(timezone.now().strftime("%Y") + timezone.now().strftime("%m") + format(int(str(qs.protocol)[6:]) + 1, "04"))
+			return protocol
+		else:
+			protocol = int(timezone.now().strftime("%Y") + timezone.now().strftime("%m") + format(1, "04"))
+			return protocol
+	except:
 		protocol = int(timezone.now().strftime("%Y") + timezone.now().strftime("%m") + format(1, "04"))
 		return protocol
 
@@ -36,27 +40,27 @@ class Diary(models.Model):
 
 	diaryType = models.ForeignKey(DiariesType, on_delete=models.CASCADE, verbose_name="Diary Type")
 	services = models.ForeignKey(CashDesk, on_delete=models.CASCADE, null=True, verbose_name="Service")
-	customer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
-	# customer = ChainedForeignKey(
-    #     Customer,
-	# 	verbose_name='Customer',
-	# 	chained_field="services",
-    #     chained_model_field="services",
-	# 	auto_choose = True,
-	# 	show_all = False,
-	# 	null = True,
-	# 	blank= True)
+	# customer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
+	customer = ChainedForeignKey(
+        Customer,
+		verbose_name='Customer',
+		chained_field="services",
+        chained_model_field="services",
+		auto_choose = True,
+		show_all = False,
+		null = True,
+		blank= True)
 	title = models.CharField(max_length=200)
 	text = HTMLField('Content', blank=True)
 	upload = models.FileField(upload_to=settings.STATIC_UPLOAD, null=True, blank=True)
-	sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE, null=True, verbose_name="Service")
+	# sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE, null=True, verbose_name="Service")
 
-	# sign = ChainedForeignKey(
-	# 	OperatorNew,
-	# 	verbose_name="Sign",
-	# 	chained_field='services',
-	# 	chained_model_field='services',
-	# 	null=True)
+	sign = ChainedForeignKey(
+		OperatorNew,
+		verbose_name="Sign",
+		chained_field='services',
+		chained_model_field='services',
+		null=True)
 
 	created_date = models.DateTimeField(default=timezone.now)
 
@@ -121,10 +125,10 @@ class CashMovements(models.Model):
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
 	sign = ChainedForeignKey(
 		'settings.OperatorNew',
-		 verbose_name="Sign",
-		 chained_field='cashdesk',
-		 chained_model_field='services',
-		 null=True)
+		verbose_name="Sign",
+		chained_field='cashdesk',
+		chained_model_field='services',
+		null=True)
 
 
 	def publish(self):
@@ -142,7 +146,7 @@ class CashMovementsCustomerDetails(models.Model):
 		verbose_name_plural = "Cash Movements Customer Details"
 
 	prot = models.ForeignKey('CashMovements')
-	cashdesk = models.ForeignKey('settings.CashDesk', null=True)
+	cashdesk = models.ForeignKey(CashDesk, null=True)
 	operation_date = models.DateField(default=timezone.now, editable=False)
 	customer = ChainedForeignKey(
         'settings.Customer',
@@ -208,7 +212,7 @@ class PharmaceuticalInventoryMovements(models.Model):
 		'settings.OperatorNew',
 		 verbose_name="Sign",
 		 chained_field='cashdesk',
-		 chained_model_field='cashdesk')
+		 chained_model_field='services')
 
 	def publish(self):
 		self.published_date = timezone.now()
