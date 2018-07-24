@@ -35,7 +35,7 @@ class Diary(models.Model):
 	)
 
 	diaryType = models.ForeignKey('settings.DiariesType', on_delete=models.CASCADE, verbose_name="Diary Type")
-	services = models.ForeignKey('settings.CashDesk', verbose_name="Service")
+	services = models.ForeignKey('settings.CashDesk', null=True, verbose_name="Service")
 	# services = models.ForeignKey('settings.CashDesk', on_delete=models.CASCADE, null=True, verbose_name="Service")
 	# customer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
 	customer = ChainedForeignKey(
