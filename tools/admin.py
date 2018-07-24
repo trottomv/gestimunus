@@ -269,7 +269,7 @@ class CashMovementsCustomerDetailsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
-    list_display = ('show_prot', 'operation_date', 'cashdesk', 'customer', 'supplier', 'amount', 'note')
+    list_display = ('show_prot', 'operation_date', 'cashdesk', 'customer', 'supplier', 'amount', 'note',)
     list_filter = (('customer' , RelatedOnlyFieldListFilter), ('operation_date', DateRangeFilter))
     readonly_fields = ('prot', 'operation_date', 'customer', 'supplier', 'amount', 'note')
 
