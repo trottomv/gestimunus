@@ -322,7 +322,7 @@ class CashSummaryAdmin(admin.ModelAdmin):
 
         response.context_data['summary_cd'] = list(
         qs
-        .values('cashdesk__id', 'cashdesk__cashdesk', 'cashdesk__opening_amount', 'cashdesk__centercost', 'causal_id__in_out').distinct().order_by('cashdesk__centercost').annotate(**metrics) #.filter(cashdesk__in=current_user_cashdesk)
+        .values('cashdesk__id', 'cashdesk__cashdesk', 'cashdesk__opening_amount', 'cashdesk__centercost', 'causal_id__in_out', 'cashdesk__opening_amount').distinct().order_by('cashdesk__centercost').annotate(**metrics) #.filter(cashdesk__in=current_user_cashdesk)
         )
 
         # response.context_data['summary_causal_entry'] = list(
