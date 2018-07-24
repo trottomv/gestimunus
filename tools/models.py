@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 from tinymce import HTMLField
 from gestimunus import settings
 from recurrence.fields import RecurrenceField
-# from settings.models import CashDesk, MovementsCausal, Customer, Profile, DiariesType
+from settings.models import CashDesk, MovementsCausal, Customer, Profile, DiariesType
 from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
 
 
@@ -52,7 +52,7 @@ class Diary(models.Model):
 	sign = ChainedForeignKey(
 		'settings.OperatorNew',
 		 verbose_name="Sign",
-		 chained_field='cashdesk',
+		 chained_field='services',
 		 chained_model_field='services')
 
 	created_date = models.DateTimeField(default=timezone.now)
