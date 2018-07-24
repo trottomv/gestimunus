@@ -115,8 +115,8 @@ DATABASES = {
         #                   'HOST': env("DBHOST"),
         #                   'PORT': '',
         #               }
-        # 'default': dj_database_url.config(default=config('DATABASE_URL'))
-        'default': dj_database_url.config()
+        'default': dj_database_url.config(default=env("DATABASE_URL"))
+        # 'default': dj_database_url.config()
 }
 
 db_from_env = dj_database_url.config(conn_max_age=500)
@@ -197,7 +197,7 @@ LOGGING = {
     },
 }
 
-try:
-    from .local_settings import *
-except ImportError:
-    pass
+# try:
+#     from .local_settings import *
+# except ImportError:
+#     pass
