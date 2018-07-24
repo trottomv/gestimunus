@@ -53,7 +53,8 @@ class Diary(models.Model):
 		'settings.OperatorNew',
 		 verbose_name="Sign",
 		 chained_field='services',
-		 chained_model_field='services')
+		 chained_model_field='services',
+		 null=True)
 
 	created_date = models.DateTimeField(default=timezone.now)
 
