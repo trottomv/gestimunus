@@ -33,7 +33,13 @@ class CashDesk(models.Model):
 	# for index, value in enumerate(u):
 	# 	singu = (str(index), str(value))
 	# 	LIST = LIST + (singu,)
+	# @property
+	# def cashdesk_id(self):
+	# 	return self.id
 
+
+	# id = models.AutoField()
+	# id = models.AutoField(primary_key=True)
 	cashdesk = models.CharField(max_length=200, verbose_name=_('Cash Desk'))
 	centercost = models.IntegerField(verbose_name=_('Center Cost'))
 	opening_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Opening Amount", null=True)
