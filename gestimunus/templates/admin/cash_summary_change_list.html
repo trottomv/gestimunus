@@ -8,10 +8,11 @@
     <script>
     var totalsIn = [0, 0, 0, 0, 0];
     var totalsOut = [0, 0, 0, 0, 0];
+    var totalsOpen = 0;
     $(document).ready(function() {
 
         var $dataRows = $(".table tr:not('.row, .title')");
-        console.log($dataRows)
+        // console.log($dataRows)
 
         $dataRows.each(function(i) {
             $(this).find(".cashin").each(function(j) {
@@ -33,10 +34,13 @@
             $(this).html(totalsOut[i].toFixed(2) + " €");
         });
 
-        $(".table th.cashbalance").each(function(i) {
-            $(this).html(totalsIn[i] + totalsOut[i] + " €");
+        $(".cashopen").each(function(index) {
+            totalsOpen += parseFloat($(this).html());
         });
 
+        $(".table th.cashbalance").each(function(i) {
+            $(this).html(totalsOpen + totalsIn[i] + totalsOut[i] + " €");
+        });
     });
     </script>
 {% endblock %}
@@ -47,7 +51,13 @@
       <em>From</em> <b> {% with summary|last as last %} {{ last.operation_date }} {% endwith %} |</b>
       <em>To</em> <b>{{ summary.0.operation_date }}</b> </span>
     <p>.</p>
-
+    {% for cashin in summary_cd %}
+      {% if cashin.causal_id__in_out == 2 %}
+        <div class="cashopen" style="visibility:hidden">
+          {{ cashin.cashdesk__opening_amount }}
+        </div>
+      {% endif %}
+    {% endfor %}
     <h3><strong>CASH IN</strong></h3>
     <table class="table">
       <thead>
@@ -60,13 +70,13 @@
       <tbody>
         <!-- {{summary_cd}} -->
         {% for cashin in summary_cd %}
-          {% if cashin.causal_id__in_out == 1 %}
+        {% if cashin.causal_id__in_out == 1 %}
             <tr class="{{cashin.cashdesk__centercost}}">
               <th scope="row">{{ cashin.cashdesk__centercost }}</th>
               <td width="40%">{{ cashin.cashdesk__cashdesk }}</td>
               <td class="cashin">{{ cashin.sum }} €</td>
             </tr>
-          {% endif %}
+            {% endif %}
         {% endfor %}
         <tr style="color:#228b22">
           <td></td>
