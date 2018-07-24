@@ -28,11 +28,11 @@ class CashDesk(models.Model):
 		verbose_name_plural = _("Cash Desks")
 		verbose_name = _("Cash Desk")
 
-	u = User.objects.all()
-	LIST = ()
-	for index, value in enumerate(u):
-		singu = (str(index), str(value))
-		LIST = LIST + (singu,)
+	# u = User.objects.all()
+	# LIST = ()
+	# for index, value in enumerate(u):
+	# 	singu = (str(index), str(value))
+	# 	LIST = LIST + (singu,)
 
 	cashdesk = models.CharField(max_length=200, verbose_name=_('Cash Desk'))
 	centercost = models.IntegerField(verbose_name=_('Center Cost'))

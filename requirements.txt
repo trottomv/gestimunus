@@ -51,7 +51,6 @@ tablib==0.12.1
 unicodecsv==0.14.1
 virtualenv==16.0.0
 virtualenv-clone==0.3.0
-waitress==1.1.0
 whitenoise==3.3.1
 xadmin==0.6.1
 xlrd==1.1.0
