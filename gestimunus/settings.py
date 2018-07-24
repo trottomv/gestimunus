@@ -107,15 +107,16 @@ WSGI_APPLICATION = 'gestimunus.wsgi.application'
 
 
 DATABASES = {
-        'default': {
-                          'ENGINE': 'django.db.backends.postgresql_psycopg2',
-                          'NAME': env("DBNAME"),
-                          'USER': env("DBUSER"),
-                          'PASSWORD': env("DBPASSWD"),
-                          'HOST': env("DBHOST"),
-                          'PORT': '',
-                      }
+        # 'default': {
+        #                   'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #                   'NAME': env("DBNAME"),
+        #                   'USER': env("DBUSER"),
+        #                   'PASSWORD': env("DBPASSWD"),
+        #                   'HOST': env("DBHOST"),
+        #                   'PORT': '',
+        #               }
         # 'default': dj_database_url.config(default=config('DATABASE_URL'))
+        'default': dj_database_url.config()
 }
 
 db_from_env = dj_database_url.config(conn_max_age=500)
@@ -195,3 +196,8 @@ LOGGING = {
         },
     },
 }
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
