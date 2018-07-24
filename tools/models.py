@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 from tinymce import HTMLField
 from gestimunus import settings
 from recurrence.fields import RecurrenceField
-from settings.models import CashDesk, MovementsCausal, Customer, Profile, DiariesType
+from settings.models import CashDesk, MovementsCausal, Customer, Profile, DiariesType, OperatorNew
 from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
 
 
@@ -34,12 +34,12 @@ class Diary(models.Model):
 		editable=False
 	)
 
-	diaryType = models.ForeignKey('settings.DiariesType', on_delete=models.CASCADE, verbose_name="Diary Type")
-	services = models.ForeignKey('settings.CashDesk', null=True, verbose_name="Service")
+	diaryType = models.ForeignKey(DiariesType, on_delete=models.CASCADE, verbose_name="Diary Type")
+	services = models.ForeignKey(CashDesk, on_delete=models.CASCADE, null=True, verbose_name="Service")
 	# services = models.ForeignKey('settings.CashDesk', on_delete=models.CASCADE, null=True, verbose_name="Service")
 	# customer = models.ForeignKey('settings.Customer', on_delete=models.CASCADE, blank=True, null=True)
 	customer = ChainedForeignKey(
-        'settings.Customer',
+        Customer,
 		verbose_name='Customer',
 		chained_field="services",
         chained_model_field="services",
@@ -50,12 +50,14 @@ class Diary(models.Model):
 	title = models.CharField(max_length=200)
 	text = HTMLField('Content', blank=True)
 	upload = models.FileField(upload_to=settings.STATIC_UPLOAD, null=True, blank=True)
+	# sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE, null=True, verbose_name="Service")
+
 	sign = ChainedForeignKey(
-		'settings.OperatorNew',
-		 verbose_name="Sign",
-		 chained_field='services',
-		 chained_model_field='services',
-		 null=True)
+		OperatorNew,
+		verbose_name="Sign",
+		chained_field='services',
+		chained_model_field='services',
+		null=True)
 
 	created_date = models.DateTimeField(default=timezone.now)
 
@@ -207,7 +209,7 @@ class PharmaceuticalInventoryMovements(models.Model):
 		'settings.OperatorNew',
 		 verbose_name="Sign",
 		 chained_field='cashdesk',
-		 chained_model_field='services')
+		 chained_model_field='cashdesk')
 
 	def publish(self):
 		self.published_date = timezone.now()
