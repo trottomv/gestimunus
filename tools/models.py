@@ -30,7 +30,7 @@ class Diary(models.Model):
 
 	author = models.ForeignKey(
 		User,
-		null=True,
+		# null=True,
 		editable=False
 	)
 
@@ -50,14 +50,14 @@ class Diary(models.Model):
 	title = models.CharField(max_length=200)
 	text = HTMLField('Content', blank=True)
 	upload = models.FileField(upload_to=settings.STATIC_UPLOAD, null=True, blank=True)
-	# sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE, null=True, verbose_name="Service")
+	sign = models.ForeignKey('settings.OperatorNew', on_delete=models.CASCADE, null=True, verbose_name="Service")
 
-	sign = ChainedForeignKey(
-		OperatorNew,
-		verbose_name="Sign",
-		chained_field='services',
-		chained_model_field='services',
-		null=True)
+	# sign = ChainedForeignKey(
+	# 	OperatorNew,
+	# 	verbose_name="Sign",
+	# 	chained_field='services',
+	# 	chained_model_field='services',
+	# 	null=True)
 
 	created_date = models.DateTimeField(default=timezone.now)
 
@@ -205,11 +205,11 @@ class PharmaceuticalInventoryMovements(models.Model):
 	drug = models.CharField(max_length=200, blank=True, verbose_name="Generic Drug")
 	quantity = models.IntegerField()
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
-	sign = ChainedForeignKey(
-		'settings.OperatorNew',
-		 verbose_name="Sign",
-		 chained_field='cashdesk',
-		 chained_model_field='cashdesk')
+	# sign = ChainedForeignKey(
+	# 	'settings.OperatorNew',
+	# 	 verbose_name="Sign",
+	# 	 chained_field='cashdesk',
+	# 	 chained_model_field='cashdesk')
 
 	def publish(self):
 		self.published_date = timezone.now()
