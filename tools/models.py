@@ -9,6 +9,9 @@ from recurrence.fields import RecurrenceField
 from settings.models import CashDesk, MovementsCausal, Customer, Profile, DiariesType, OperatorNew
 from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
 
+from django.db.models.signals import pre_save, post_save, m2m_changed
+from django.dispatch import receiver
+
 
 # Create your models here.
 
@@ -137,7 +140,7 @@ class CashMovements(models.Model):
 
 	def __str__(self):
 		# return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
-		return u'%s' % (self.protocol)
+		return u'%s %s' % (self.protocol, self.cashdesk)
 
 
 class CashMovementsCustomerDetails(models.Model):
@@ -146,15 +149,19 @@ class CashMovementsCustomerDetails(models.Model):
 		verbose_name_plural = "Cash Movements Customer Details"
 
 	prot = models.ForeignKey('CashMovements')
-	cashdesk = models.ForeignKey(CashDesk, null=True)
+	# cashdesk = models.CharField(max_length=200, verbose_name="cashdesk", null=True, blank=True, editable=False)
+
+	cashdesk = models.ForeignKey(CashDesk, null=True, editable=False)
+	# cashdesk = CashMovements.cashdesk
 	operation_date = models.DateField(default=timezone.now, editable=False)
-	customer = ChainedForeignKey(
-        'settings.Customer',
-		verbose_name='Service Customer',
-		chained_field='cashdesk',
-        chained_model_field='services',
-		null=True)
-	supplier = models.CharField(max_length=200, verbose_name="Supplier", null=True)
+	customer = models.ForeignKey(Customer, null=True, blank=True, verbose_name="Service Customer")
+	# customer = ChainedForeignKey(
+    #     'settings.Customer',
+	# 	verbose_name='Service Customer',
+	# 	chained_field='cashdesk',
+    #     chained_model_field='services',
+	# 	null=True)
+	supplier = models.CharField(max_length=200, verbose_name="Supplier", null=True, blank=True, editable=False)
 	amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount", blank=True)
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
 
@@ -220,3 +227,11 @@ class PharmaceuticalInventoryMovements(models.Model):
 
 	def __str__(self):
 		return u'%s' % (self.id)
+
+
+@receiver(pre_save, sender=CashMovementsCustomerDetails)
+def get_supplier(sender, instance, *args, **kwargs):
+	supplier = CashMovements.objects.filter(id=instance.prot_id).values('supplier')[0]['supplier']
+	cashdesk = CashMovements.objects.filter(id=instance.prot_id).values('cashdesk_id')[0]['cashdesk_id']
+	instance.supplier = supplier
+	instance.cashdesk_id = cashdesk
