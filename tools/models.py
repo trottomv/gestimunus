@@ -140,7 +140,7 @@ class CashMovements(models.Model):
 
 	def __str__(self):
 		# return u'%s %s %s %s' % (self.operation_date, self.amount, self.causal, self.cashdesk)
-		return u'%s %s' % (self.protocol, self.cashdesk)
+		return u'%s' % (self.protocol)
 
 
 class CashMovementsCustomerDetails(models.Model):
