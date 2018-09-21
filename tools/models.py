@@ -98,10 +98,11 @@ class Agenda(models.Model):
 	    # return u'%s %s' % (self.title, self.created_date)
 
 class Planner(Agenda):
-    class Meta:
-        proxy = True
-    	verbose_name_plural = _("Events Planner")
-        verbose_name = _("Agenda")
+
+	class Meta:
+		proxy = True
+		verbose_name_plural = _("Events Planner")
+		verbose_name = _("Agenda")
 
 class CashMovements(models.Model):
 
