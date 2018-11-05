@@ -65,7 +65,11 @@ INSTALLED_APPS = [
     'django_readonly_field',
     'mathfilters',
     # 'rest_framework',
+    'registration',
 ]
+
+ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
+REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',

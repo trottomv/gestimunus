@@ -36,6 +36,7 @@ urlpatterns = [
     url(r'^chaining/', include('smart_selects.urls')),
     # url(r'^adminlte/', include('adminlte.urls')),
     # url(r'^static/(?P<path>.*)$', 'django.views.static.serve', include({"document_root": settings.STATIC_ROOT})),
+    url(r'^accounts/', include('registration.backends.default.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
