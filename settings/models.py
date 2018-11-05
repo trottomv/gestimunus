@@ -57,7 +57,7 @@ class Profile(models.Model):
         (MED_OPERATOR, 'OSS'),
     )
 
-    user = models.OneToOneField(User) #, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, null=True, blank=True)
     cashdeskowner = models.ManyToManyField(CashDesk, blank=True)
 
@@ -84,7 +84,7 @@ class MovementsCausal(models.Model):
 	causal = models.CharField(max_length=200)
 	admin = models.BooleanField(default=False, help_text='[Select for assign only to admins]', verbose_name="Admin Only", blank=True)
 	in_out = models.PositiveSmallIntegerField(choices=IN_OUT, null=True, verbose_name="In / Out")
-	cashpaymant = models.ForeignKey("CashPayment", verbose_name=_('Cash Payment'), null=True)
+	cashpaymant = models.ForeignKey("CashPayment", verbose_name=_('Cash Payment'), null=True, on_delete=models.CASCADE)
 
 	def publish(self):
 		self.published_date = timezone.now()

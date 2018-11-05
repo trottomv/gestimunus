@@ -38,7 +38,8 @@ class Diary(models.Model):
 	author = models.ForeignKey(
 		User,
 		null=True,
-		editable=False
+		editable=False,
+    on_delete=models.CASCADE
 	)
 
 	diaryType = models.ForeignKey(DiariesType, on_delete=models.CASCADE, verbose_name="Diary Type")
@@ -112,7 +113,8 @@ class CashMovements(models.Model):
 	author = models.ForeignKey(
 		User,
 		null=True,
-		editable=False
+		editable=False,
+    on_delete=models.CASCADE
 	)
 
 	protocol = models.IntegerField(unique=True, editable=False, default=protocolgen)
@@ -120,19 +122,21 @@ class CashMovements(models.Model):
 	recived = models.NullBooleanField(default=False, verbose_name="Recived")
 	operation_date = models.DateField(verbose_name="Operation Date", default=timezone.now)
 	document_date =  models.DateField(blank=True, null=True, verbose_name="Document Date")
-	cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service")
-	causal = models.ForeignKey('settings.MovementsCausal', verbose_name="Causal")
-	mv_type = models.ForeignKey('settings.MovementsType', verbose_name="Type", null=True, blank=True)
+	cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service", on_delete=models.CASCADE)
+	causal = models.ForeignKey('settings.MovementsCausal', verbose_name="Causal", on_delete=models.CASCADE)
+	mv_type = models.ForeignKey('settings.MovementsType', verbose_name="Type", null=True, blank=True, on_delete=models.CASCADE)
 	supplier = models.CharField(max_length=500, verbose_name="Supplier", null=True)
 	amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount", help_text='(Use "." as decimal separator)')
-	customer = models.ForeignKey('settings.Customer', null=True, blank=True, editable=False, verbose_name="Service Customer")
+	customer = models.ForeignKey('settings.Customer', null=True, blank=True, editable=False, verbose_name="Service Customer", on_delete=models.CASCADE)
 	note = models.CharField(max_length=200, blank=True, verbose_name="Note")
 	sign = ChainedForeignKey(
 		'settings.OperatorNew',
 		verbose_name="Sign",
 		chained_field='cashdesk',
 		chained_model_field='services',
-		null=True)
+		null=True,
+    on_delete=models.CASCADE
+  )
 
 
 	def publish(self):
@@ -149,13 +153,13 @@ class CashMovementsCustomerDetails(models.Model):
 	class Meta:
 		verbose_name_plural = "Cash Movements Customer Details"
 
-	prot = models.ForeignKey('CashMovements')
+	prot = models.ForeignKey('CashMovements', on_delete=models.CASCADE)
 	# cashdesk = models.CharField(max_length=200, verbose_name="cashdesk", null=True, blank=True, editable=False)
 
-	cashdesk = models.ForeignKey(CashDesk, null=True, editable=False)
+	cashdesk = models.ForeignKey(CashDesk, null=True, editable=False, on_delete=models.CASCADE)
 	# cashdesk = CashMovements.cashdesk
 	operation_date = models.DateField(default=timezone.now, editable=False)
-	customer = models.ForeignKey(Customer, null=True, blank=True, verbose_name="Service Customer")
+	customer = models.ForeignKey(Customer, null=True, blank=True, verbose_name="Service Customer", on_delete=models.CASCADE)
 	# customer = ChainedForeignKey(
     #     'settings.Customer',
 	# 	verbose_name='Service Customer',
@@ -199,17 +203,18 @@ class PharmaceuticalInventoryMovements(models.Model):
 			User,
 			null=True,
 			editable=False,
+      on_delete=models.CASCADE
 	)
 
 	load_discharge = models.PositiveSmallIntegerField(choices=IN_OUT, null=True, verbose_name="Load / Discharge")
 	annulled = models.BooleanField(default=True, help_text='[Deselect for cancel entry]', verbose_name="Validation")
 	operation_date = models.DateField(verbose_name="Operation Date", default=timezone.now)
-	cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service")
+	cashdesk = models.ForeignKey('settings.CashDesk', verbose_name="Cash Service", on_delete=models.CASCADE)
 	customer = ChainedForeignKey(
         'settings.Customer',
 		verbose_name='Customer',
 		chained_field="cashdesk",
-        chained_model_field="services",
+    chained_model_field="services",
 		auto_choose = True,
 		show_all = False,
 		null = True)
