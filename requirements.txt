@@ -35,7 +35,7 @@ django-tinymce4-lite==1.7.1
 djangorestframework==3.8.2
 et-xmlfile==1.0.1
 gunicorn==19.9.0
-httplib2==0.9.2
+httplib2==0.18.0
 icalendar==4.0.1
 jdcal==1.4
 jsmin==2.2.2
