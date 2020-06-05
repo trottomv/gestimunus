@@ -3,7 +3,7 @@ closure==20180204
 codegen==1.0
 diff-match-patch==20121119
 dj-database-url==0.5.0
-Django==1.11.18
+Django==1.11.29
 django-admin-bootstrapped==2.5.7
 django-admin-interface==0.6.3
 django-admin-rangefilter==0.3.6
